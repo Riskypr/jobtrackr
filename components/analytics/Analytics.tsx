@@ -45,60 +45,60 @@ export default function Analytics({ jobs }: any) {
     <div className="grid lg:grid-cols-3 gap-6">
 
       {/* 🔥 LEFT: SUMMARY */}
-      <div className="lg:col-span-2 grid sm:grid-cols-2 gap-4">
+      <div className="grid-cols-2 lg:col-span-2 grid sm:grid-cols-2 gap-4">
 
         {/* TOTAL */}
-        <div className="bg-white dark:bg-gray-900 border dark:border-gray-800 p-5 rounded-2xl shadow-sm hover:shadow-md transition border flex items-center gap-4">
+        <div className="bg-white dark:bg-gray-900 dark:border-gray-800 p-5 rounded-2xl shadow-sm hover:shadow-md transition border flex items-center gap-4">
           <div className="p-3 bg-blue-100 rounded-xl">
             <Briefcase className="text-blue-600" size={20} />
           </div>
           <div>
-            <p className="text-sm text-gray-500">Total Apply</p>
-            <h2 className="text-2xl font-bold">{total}</h2>
+            <p className="text-xs md:text-sm text-gray-500">Total Apply</p>
+            <h2 className="text-xl md:text-2xl font-bold">{total}</h2>
           </div>
         </div>
 
         {/* INTERVIEW */}
-        <div className="bg-white dark:bg-gray-900 border dark:border-gray-800 p-5 rounded-2xl shadow-sm hover:shadow-md transition border flex items-center gap-4">
+        <div className="bg-white dark:bg-gray-900 dark:border-gray-800 p-5 rounded-2xl shadow-sm hover:shadow-md transition border flex items-center gap-4">
           <div className="p-3 bg-yellow-100 rounded-xl">
             <TrendingUp className="text-yellow-600" size={20} />
           </div>
           <div>
-            <p className="text-sm text-gray-500">Interview</p>
-            <h2 className="text-2xl font-bold">{interview}</h2>
+            <p className="text-xs md:text-sm text-gray-500">Interview</p>
+            <h2 className="text-xl md:text-2xl font-bold">{interview}</h2>
           </div>
         </div>
 
         {/* SUCCESS */}
-        <div className="bg-white dark:bg-gray-900 border dark:border-gray-800 p-5 rounded-2xl shadow-sm hover:shadow-md transition border flex items-center gap-4">
+        <div className="bg-white dark:bg-gray-900 dark:border-gray-800 p-5 rounded-2xl shadow-sm hover:shadow-md transition border flex items-center gap-4">
           <div className="p-3 bg-green-100 rounded-xl">
             <CheckCircle className="text-green-600" size={20} />
           </div>
           <div>
-            <p className="text-sm text-gray-500">Success Rate</p>
-            <h2 className="text-2xl font-bold">{successRate}%</h2>
+            <p className="text-xs md:text-sm text-gray-500">Success Rate</p>
+            <h2 className="text-xl md:text-2xl font-bold">{successRate}%</h2>
           </div>
         </div>
 
         {/* REJECTED */}
-        <div className="bg-white dark:bg-gray-900 border dark:border-gray-800 p-5 rounded-2xl shadow-sm hover:shadow-md transition border flex items-center gap-4">
+        <div className="bg-white dark:bg-gray-900 dark:border-gray-800 p-5 rounded-2xl shadow-sm hover:shadow-md transition border flex items-center gap-4">
           <div className="p-3 bg-red-100 rounded-xl">
             <XCircle className="text-red-600" size={20} />
           </div>
           <div>
-            <p className="text-sm text-gray-500">Rejected Rate</p>
-            <h2 className="text-2xl font-bold">{rejectedRate}%</h2>
+            <p className="text-xs md:text-sm text-gray-500">Rejected Rate</p>
+            <h2 className="text-xl md:text-2xl font-bold">{rejectedRate}%</h2>
           </div>
         </div>
       </div>
 
       {/* 🔥 RIGHT: PIE CHART */}
-      <div className="bg-white dark:bg-gray-900 border dark:border-gray-800 p-6 rounded-2xl shadow-sm border flex flex-col">
-        {/* <h2 className="font-semibold mb-4">
+      <div className="bg-white dark:bg-gray-900 dark:border-gray-800 p-6 rounded-2xl shadow-sm border flex flex-col">
+        <h2 className="font-semibold mb-4">
           Status Distribution
-        </h2> */}
+        </h2>
 
-        <div className="flex-1 h-">
+        <div className="flex-1 min-h-[200px] md:min-h-[100px]">
           <ResponsiveContainer>
             <PieChart>
               <Pie data={statusCount} dataKey="value">
@@ -112,7 +112,7 @@ export default function Analytics({ jobs }: any) {
         </div>
 
         {/* 🔥 MINI LEGEND */}
-        {/* <div className="mt-4 flex flex-wrap gap-2 text-xs">
+        <div className="mt-4 flex flex-wrap gap-2 text-xs">
           {statusCount.map((item: any, i: number) => (
             <div key={i} className="flex items-center gap-1">
               <div
@@ -122,7 +122,7 @@ export default function Analytics({ jobs }: any) {
               {item.name}
             </div>
           ))}
-        </div> */}
+        </div>
       </div>
     </div>
   );

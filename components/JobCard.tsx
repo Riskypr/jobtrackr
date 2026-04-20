@@ -25,6 +25,7 @@ export default function JobCard({ job }: { job: Job }) {
   
   return (
     <div
+    onClick={() => router.push(`/jobs/${job.id}`)}
     className="group relative p-5 rounded-2xl border 
     bg-white/70 backdrop-blur 
     dark:bg-gray-900 dark:border-gray-800
@@ -71,9 +72,8 @@ export default function JobCard({ job }: { job: Job }) {
           })}
         </div>
 
-        {/* ACTION */}
+
         <button 
-        onClick={() => router.push(`/jobs/${job.id}`)}
         className="flex items-center gap-1 text-xs font-medium text-blue-600 dark:text-blue-400 hover:gap-2 transition-all">
           View
           <ArrowRight size={14} />

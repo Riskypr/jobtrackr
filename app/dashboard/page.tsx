@@ -1,167 +1,114 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import JobCard from "@/components/JobCard";
-import AddJobForm from "@/components/AddJobForm";
-import Analytics from "@/components/Analytics";
-import ThemeToggle from "@/components/ThemeToggle";
-import {
-  Plus,
-  X,
-  Briefcase,
-  LayoutDashboard,
-} from "lucide-react";
+import { useState } from "react";
+import { useJobs } from "@/hooks/useJobs";
+import { CalendarDays, LayoutGrid, Zap } from "lucide-react"; // Icon tambahan
 
-const statusLabel: Record<string, string> = {
-  ALL: "All",
-  APPLIED: "Applied",
-  INTERVIEW: "Interview",
-  ACCEPTED: "Accepted",
-  REJECTED: "Rejected",
-};
+import Sidebar from "@/components/navigation/navigation";
+import Header from "@/components/header/Header";
+import Analytics from "@/components/analytics/Analytics";
+import YearDistribution from "@/components/analytics/YearDistribution";
+import ActivityFeed from "@/components/analytics/ActivityFeed";
 
 export default function Dashboard() {
-  const [jobs, setJobs] = useState([]);
-  const [open, setOpen] = useState(false);
+  const { jobs } = useJobs();
 
-  const [statusFilter, setStatusFilter] = useState("ALL");
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 5 }, (_, i) => currentYear - i);
+  const [yearFilter, setYearFilter] = useState(currentYear);
 
-  async function fetchJobs() {
-    const res = await fetch("/api/jobs");
-    const data = await res.json();
-    setJobs(data);
-  }
-
-  useEffect(() => {
-    fetchJobs();
-  }, []);
-
-  const filteredJobs = jobs.filter((job: any) => {
-    return statusFilter === "ALL" || job.status === statusFilter;
+  const filteredJobs = (jobs || []).filter((job: any) => {
+    const jobYear = new Date(job.appliedAt).getFullYear();
+    return jobYear === yearFilter;
   });
 
   return (
-    <div className="flex min-h-screen 
-    bg-gradient-to-br from-slate-50 via-white to-slate-100 
-    dark:from-gray-950 dark:via-gray-950 dark:to-gray-900">
+    <div className="flex min-h-screen bg-[#F8FAFC] dark:bg-[#020617]">
+      {/* SIDEBAR - Pastikan sudah fixed seperti instruksi sebelumnya */}
+      <Sidebar />
 
-      {/* 🔥 SIDEBAR */}
-      <aside className="hidden md:flex w-64 flex-col border-r 
-      bg-white/70 backdrop-blur 
-      dark:bg-gray-900 dark:border-gray-800 p-6">
+      {/* MAIN CONTENT */}
+      <main className="flex-1 md:pl-64 transition-all duration-300">
+        <div className="max-w-[1400px] mx-auto p-4 md:p-8 lg:p-10 space-y-10">
+          
+          {/* TOP SECTION: Header & Welcome */}
+          <div className="space-y-6">
+            <Header />
+            
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-medium text-sm mb-1">
+                  <Zap size={16} fill="currentColor" />
+                  <span>Welcome back!</span>
+                </div>
+                <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                  Dashboard
+                </h1>
+                <p className="text-slate-500 dark:text-slate-400 mt-1 text-sm md:text-base">
+                  You have applied to <span className="font-semibold text-slate-900 dark:text-slate-200">{filteredJobs.length}</span> jobs in {yearFilter}.
+                </p>
+              </div>
 
-        <h2 className="text-xl font-bold mb-8 text-gray-900 dark:text-white">
-          JobTrackr
-        </h2>
-
-        <nav className="space-y-2 text-sm">
-
-          <div className="flex items-center gap-2 px-3 py-2 rounded-xl 
-          bg-blue-100 dark:bg-blue-900/30 
-          text-blue-600 dark:text-blue-400 font-medium">
-            <LayoutDashboard size={16} />
-            Dashboard
-          </div>
-
-          <div className="flex items-center gap-2 px-3 py-2 rounded-xl 
-          text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition cursor-pointer">
-            <Briefcase size={16} />
-            Applications
-          </div>
-
-        </nav>
-      </aside>
-
-      {/* 🔥 MAIN */}
-      <main className="flex-1 p-6 space-y-8">
-
-        {/* HEADER */}
-        <div className="flex justify-between items-center">
-
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Dashboard
-            </h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Track your job applications & progress
-            </p>
-          </div>
-
-          <ThemeToggle />
-        </div>
-
-        {/* 🔥 FILTER (MODERN PILL) */}
-        <div className="flex flex-wrap gap-2">
-
-          {Object.keys(statusLabel).map((status) => (
-            <button
-              key={status}
-              onClick={() => setStatusFilter(status)}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all
-              ${
-                statusFilter === status
-                  ? "bg-blue-600 text-white shadow-md"
-                  : "bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
-              }`}
-            >
-              {statusLabel[status]}
-            </button>
-          ))}
-        </div>
-
-        {/* 🔥 ANALYTICS */}
-        <Analytics jobs={filteredJobs} />
-
-        {/* 🔥 JOB LIST */}
-        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {filteredJobs.length > 0 ? (
-            filteredJobs.map((job: any) => (
-              <JobCard key={job.id} job={job} />
-            ))
-          ) : (
-            <div className="col-span-full text-center py-12 text-gray-500">
-              <p className="text-lg">No applications yet 🚀</p>
-              <p className="text-sm">
-                Click the + button to start tracking
-              </p>
+              {/* MODERN YEAR FILTER */}
+              <div className="inline-flex p-1 bg-slate-200/50 dark:bg-slate-800/50 backdrop-blur-md rounded-2xl border border-slate-200 dark:border-slate-700">
+                {years.map((year) => (
+                  <button
+                    key={year}
+                    onClick={() => setYearFilter(year)}
+                    className={`relative px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
+                      yearFilter === year
+                        ? "bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm ring-1 ring-slate-200 dark:ring-slate-600"
+                        : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+                    }`}
+                  >
+                    {year}
+                  </button>
+                ))}
+              </div>
             </div>
-          )}
+          </div>
+
+          {/* SECTION 1: KEY METRICS */}
+          <section className="relative">
+            <div className="flex items-center gap-2 mb-4 text-slate-400 text-xs uppercase tracking-widest font-bold">
+              <LayoutGrid size={14} />
+              <span>Key Performance</span>
+            </div>
+            <Analytics jobs={filteredJobs} />
+          </section>
+
+          {/* SECTION 2: BENTO GRID ANALYTICS */}
+          <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            {/* LEFT: Distribution (Visual Data) */}
+            <div className="lg:col-span-8 group">
+              <div className="h-full bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-[2rem] p-2 hover:border-blue-500/30 transition-colors shadow-sm">
+                <div className="p-4 flex items-center justify-between">
+                   <h3 className="text-sm font-bold text-slate-700 dark:text-slate-300 px-2">Contribution Graph</h3>
+                   <CalendarDays size={18} className="text-slate-400" />
+                </div>
+                <YearDistribution jobs={filteredJobs} />
+              </div>
+            </div>
+
+            {/* RIGHT: Activity Feed */}
+            <div className="lg:col-span-4">
+              <div className="h-full">
+                <ActivityFeed jobs={filteredJobs} />
+              </div>
+            </div>
+
+          </section>
+
+          {/* FOOTER / DECORATION (Optional) */}
+          <footer className="text-center py-10">
+             <p className="text-xs text-slate-400 dark:text-slate-600">
+                JobTrackr &copy; {currentYear} • Stay Productive
+             </p>
+          </footer>
+
         </div>
       </main>
-
-      {/* 🔥 FLOATING BUTTON */}
-      <button
-        onClick={() => setOpen(true)}
-        className="fixed bottom-6 right-6 w-14 h-14 rounded-full 
-        bg-gradient-to-r from-blue-600 to-indigo-600 
-        text-white shadow-xl hover:scale-110 hover:shadow-2xl 
-        transition flex items-center justify-center"
-      >
-        <Plus size={24} />
-      </button>
-
-      {/* 🔥 MODAL */}
-      {open && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-md flex items-center justify-center z-50">
-
-          <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 w-full max-w-md shadow-2xl relative border dark:border-gray-800">
-
-            <button
-              onClick={() => setOpen(false)}
-              className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
-            >
-              <X size={20} />
-            </button>
-
-            <AddJobForm
-              onSuccess={() => {
-                fetchJobs();
-                setOpen(false);
-              }}
-            />
-          </div>
-        </div>
-      )}
     </div>
   );
 }

@@ -2,26 +2,25 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { format } from "date-fns";
-import StatusBadge from "@/components/StatusBadge";
-import JobTimeline from "@/components/JobTimeline";
-import { Trash2, Pencil } from "lucide-react";
+import { ArrowLeft, Sparkles, Calendar, ChevronRight } from "lucide-react";
+import Link from "next/link";
 
-import {
-  ArrowLeft,
-  Building2,
-  Briefcase,
-  Calendar,
-} from "lucide-react";
+import Sidebar from "@/components/navigation/navigation";
+import JobHeader from "@/components/job-detail/JobHeader";
+import JobInfoGrid from "@/components/job-detail/JobInfoGrid";
+import JobTimelineSection from "@/components/job-detail/JobTimelineSection";
+import EditStepsPanel from "@/components/job-detail/EditStepsPanel";
+import DeleteModal from "@/components/job-detail/DeleteModal";
+import JobActionMenu from "@/components/job-detail/JobActions";
 
 export default function JobDetailPage() {
   const { id } = useParams();
   const router = useRouter();
-  const [showDelete, setShowDelete] = useState(false);
 
   const [job, setJob] = useState<any>(null);
-  const [editing, setEditing] = useState(false);
   const [steps, setSteps] = useState<any[]>([]);
+  const [editing, setEditing] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
 
   async function fetchJob() {
     const res = await fetch(`/api/jobs/${id}`);
@@ -37,298 +36,137 @@ export default function JobDetailPage() {
     if (job?.steps) setSteps(job.steps);
   }, [job]);
 
-  if (!job) {
-    return (
-      <div className="p-6 text-center text-gray-500">
-        Loading...
+  if (!job) return (
+    <div className="flex items-center justify-center min-h-screen bg-[#F8FAFC] dark:bg-[#020617]">
+      <div className="animate-pulse flex flex-col items-center gap-4">
+        <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center">
+          <Sparkles className="text-blue-500 animate-spin" size={24} />
+        </div>
+        <p className="text-slate-500 font-medium">Loading...</p>
       </div>
-    );
-  }
+    </div>
+  );
 
   return (
-    <div className="min-h-screen 
-    bg-gradient-to-br from-slate-50 via-white to-slate-100 
-    dark:from-gray-950 dark:via-gray-950 dark:to-gray-900 p-6">
+    <div className="flex min-h-screen bg-[#F8FAFC] dark:bg-[#020617]">
+      <Sidebar />
 
-      <div className="max-w-3xl mx-auto">
-
-        <button
-          onClick={() => router.back()}
-          className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition mb-6"
-        >
-          <ArrowLeft size={16} />
-          Back
-        </button>
-
-        {/* 🔥 CARD */}
-        <div className="bg-white/80 dark:bg-gray-900/70 backdrop-blur-xl border border-gray-200 dark:border-gray-800 shadow-xl shadow-black/5 dark:shadow-black/30 
-        rounded-2xl p-6 shadow-lg space-y-6">
-
-          {/* HEADER */}
-          <div className="flex justify-between items-start">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-gray-500 text-sm">
-                <Briefcase size={16} />
-                Job Position
-              </div>
-
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                {job.position}
-              </h1>
-
-              <div className="flex items-center gap-2 text-gray-500 text-sm">
-                <Building2 size={16} />
-                {job.company}
+      <main className="flex-1 md:pl-64">
+        <div className="max-w-7xl mx-auto p-4 md:p-8 lg:p-10 space-y-8">
+          
+          {/* TOP NAV & BREADCRUMB */}
+          <nav className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <button 
+                onClick={() => router.push('/jobs')}
+                className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-all shadow-sm"
+              >
+                <ArrowLeft size={20} />
+              </button>
+              <div className="hidden sm:block">
+                <div className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                  <span>Applications</span>
+                  <ChevronRight size={12} />
+                  <span className="text-blue-600 dark:text-blue-400">Details</span>
+                </div>
               </div>
             </div>
 
-            {/* 🔥 RIGHT ACTION */}
             <div className="flex items-center gap-3">
-              <StatusBadge status={job.status} />
-
-              <button
-                onClick={() => setShowDelete(true)}
-                className="p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-500"
-              >
-                <Trash2 size={18} />
-              </button>
+               <JobActionMenu
+                  onEdit={() => setEditing(true)}
+                  onDelete={() => setShowDelete(true)}
+                />
             </div>
-          </div>
+          </nav>
 
-          {/* DIVIDER */}
-          <div className="h-px bg-gray-100 dark:bg-gray-800" />
+          {/* MAIN CONTENT GRID */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            {/* LEFT SIDE: Header & Info (8 Columns) */}
+            <div className="lg:col-span-8 space-y-8">
+              <section className="relative overflow-hidden bg-white dark:bg-slate-900/50 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 shadow-sm">
+                {/* Decorative Background Element */}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-xl -mr-16 -mt-16 blur-3xl" />
+                
+                <JobHeader job={job} />
+                <div className="mt-8">
+                   <JobInfoGrid job={job} />
+                </div>
+              </section>
 
-          {/* DETAILS */}
-          <div className="grid sm:grid-cols-2 gap-4">
+              {/* TIMELINE SECTION */}
+              <section className="bg-white dark:bg-slate-900/50 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 shadow-sm">
+                 <div className="flex items-center justify-between mb-8">
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">Application Journey</h3>
+                    <div className="px-3 py-1 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-full text-xs font-bold">
+                       {steps.length} Steps Total
+                    </div>
+                 </div>
 
-            <div className="bg-gray-50/80 dark:bg-gray-800/60 
-border border-gray-100 dark:border-gray-700 p-4 rounded-xl">
-              <p className="text-xs text-gray-500 mb-1">
-                Applied Date
-              </p>
-              <div className="flex items-center gap-2 text-sm font-medium">
-                <Calendar size={14} />
-                {format(new Date(job.appliedAt), "dd MMM yyyy")}
-              </div>
-            </div>
-
-            <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-xl">
-              <p className="text-xs text-gray-500 mb-1">
-                Status
-              </p>
-              <StatusBadge status={job.status} />
-            </div>
-          </div>
-
-          {/* 🔥 TIMELINE */}
-          <div>
-            <div className="flex justify-between items-center mb-3">
-              <p className="text-sm text-gray-500 dark:text-gray-400">Process Timeline</p>
-
-              <button
-                onClick={() => setEditing(!editing)}
-                className="text-xs flex items-center gap-1 text-blue-600"
-              >
-                <Pencil size={14} />
-                Edit
-              </button>
-            </div>
-
-            <JobTimeline steps={steps} />
-            {/* edit modal */}
-            {editing && (
-              <div className="mt-6 space-y-4">
-
-                {steps.map((step, i) => (
-                  <div
-                    key={i}
-                    className="p-4 rounded-xl border bg-white dark:bg-gray-900 dark:border-gray-800 space-y-3"
+                 <JobTimelineSection
+                    steps={steps}
+                    editing={editing}
+                    setEditing={setEditing}
                   >
-                    {/* 🔥 TOP ROW */}
-                    <div className="flex items-center gap-3">
-
-                      {/* NAME */}
-                      <input
-                        value={step.name}
-                        onChange={(e) => {
-                          const updated = [...steps];
-                          updated[i].name = e.target.value;
-                          setSteps(updated);
-                        }}
-                        className="flex-1 px-3 py-2 rounded-lg border text-sm
-            bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
-                      />
-
-                      {/* DONE */}
-                      <label className="flex items-center gap-1 text-xs text-gray-500">
-                        <input
-                          type="checkbox"
-                          checked={step.done}
-                          onChange={() => {
-                            const updated = [...steps];
-                            updated[i].done = !updated[i].done;
-
-                            if (updated[i].done && !updated[i].date) {
-                              updated[i].date = new Date().toISOString().slice(0, 10);
-                            }
-
-                            setSteps(updated);
+                    {editing && (
+                      <div className="mt-6 animate-in slide-in-from-top-4 duration-300">
+                        <EditStepsPanel
+                          steps={steps}
+                          setSteps={setSteps}
+                          onCancel={() => setEditing(false)}
+                          onSave={async () => {
+                            await fetch(`/api/jobs/${id}`, {
+                              method: "PATCH",
+                              body: JSON.stringify({ steps }),
+                            });
+                            setEditing(false);
+                            fetchJob();
                           }}
                         />
-                        Done
-                      </label>
-                    </div>
-
-                    {/* 🔥 BOTTOM ROW */}
-                    <div className="grid grid-cols-2 gap-3">
-
-                      {/* RESULT */}
-                      <select
-                        value={step.result || ""}
-                        onChange={(e) => {
-                          const updated = [...steps];
-                          updated[i].result = e.target.value || null;
-                          setSteps(updated);
-                        }}
-                        className="px-3 py-2 rounded-lg border text-sm
-            bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
-                      >
-                        <option value="">Status</option>
-                        <option value="PASSED">Lolos</option>
-                        <option value="FAILED">Tidak Lolos</option>
-                      </select>
-
-                      {/* DATE */}
-                      <input
-                        type="date"
-                        value={step.date || ""}
-                        onChange={(e) => {
-                          const updated = [...steps];
-                          updated[i].date = e.target.value;
-                          setSteps(updated);
-                        }}
-                        className="px-3 py-2 rounded-lg border text-sm
-            bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
-                      />
-                    </div>
-                  </div>
-                ))}
-
-                {/* 🔥 ACTIONS */}
-                <div className="flex justify-between items-center mt-4">
-
-                  <button
-                    onClick={() =>
-                      setSteps([
-                        ...steps,
-                        { name: "New Step", done: false },
-                      ])
-                    }
-                    className="text-sm text-blue-600 hover:underline"
-                  >
-                    + Add Step
-                  </button>
-
-                  <div className="flex gap-2">
-
-                    <button
-                      onClick={() => setEditing(false)}
-                      className="px-4 py-2 text-sm rounded-lg 
-                      border border-gray-200 dark:border-gray-700 
-                      hover:bg-gray-100 dark:hover:bg-gray-800 
-                      transition"
-                    >
-                      Cancel
-                    </button>
-
-                    <button
-                      onClick={async () => {
-                        let newStatus = job.status;
-
-                        const hasFailed = steps.some(
-                          (s) => s.result === "FAILED"
-                        );
-
-                        if (hasFailed) {
-                          newStatus = "REJECTED";
-                        } else {
-                          const lastDone = [...steps]
-                            .reverse()
-                            .find((s) => s.done);
-
-                          if (lastDone) {
-                            if (lastDone.name.toLowerCase().includes("interview")) {
-                              newStatus = "INTERVIEW";
-                            }
-
-                            if (lastDone.name.toLowerCase().includes("offering")) {
-                              newStatus = "ACCEPTED";
-                            }
-                          }
-                        }
-
-                        await fetch(`/api/jobs/${id}`, {
-                          method: "PATCH",
-                          body: JSON.stringify({
-                            steps,
-                            status: newStatus,
-                          }),
-                        });
-
-                        setEditing(false);
-                        fetchJob();
-                      }}
-                      className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg 
-                      border border-blue-200 dark:border-gray-700 
-                      hover:bg-blue-400 dark:hover:bg-gray-800 
-                      transition"
-                    >
-                      Save Changes
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-          </div>
-          {showDelete && (
-            <div className="fixed inset-0 bg-black/40 backdrop-blur-md flex items-center justify-center z-50">
-
-              <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 w-full max-w-sm shadow-xl border dark:border-gray-800">
-
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                  Delete Job?
-                </h2>
-
-                <p className="text-sm text-gray-500 mb-6">
-                  This action cannot be undone.
-                </p>
-
-                <div className="flex justify-end gap-2">
-                  <button
-                    onClick={() => setShowDelete(false)}
-                    className="px-4 py-2 text-sm rounded-lg border dark:border-gray-700"
-                  >
-                    Cancel
-                  </button>
-
-                  <button
-                    onClick={async () => {
-                      await fetch(`/api/jobs/${id}`, {
-                        method: "DELETE",
-                      });
-                      router.push("/dashboard");
-                    }}
-                    className="px-4 py-2 text-sm rounded-lg bg-red-600 text-white hover:bg-red-700"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </div>
+                      </div>
+                    )}
+                  </JobTimelineSection>
+              </section>
             </div>
-          )}
+
+            {/* RIGHT SIDE: Summary / Support Info (4 Columns) */}
+            <aside className="lg:col-span-4 space-y-6">
+               <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-3xl p-8 text-white shadow-xl shadow-blue-500/20">
+                  <h4 className="font-bold text-lg mb-2">Good Luck! 🚀</h4>
+                  <p className="text-blue-100 text-sm leading-relaxed">
+                    Be prepared for your next step. Consistency is the key to landing your dream job.
+                  </p>
+                  <div className="mt-6 pt-6 border-t border-white/10 flex items-center justify-between">
+                     <div className="flex flex-col">
+                        <span className="text-blue-200 text-[10px] uppercase font-bold tracking-wider">Status</span>
+                        <span className="font-bold uppercase tracking-tight">{job.status}</span>
+                     </div>
+                     <Calendar size={24} className="opacity-40" />
+                  </div>
+               </div>
+
+               {/* Helpful Note Box */}
+               <div className="bg-slate-100 dark:bg-slate-800/40 rounded-3xl p-6 border border-slate-200 dark:border-slate-800">
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-white mb-2">Quick Tip</h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                    Always update your timeline as soon as you get a response to keep your analytics accurate.
+                  </p>
+               </div>
+            </aside>
+          </div>
         </div>
-      </div>
+      </main>
+
+      {showDelete && (
+        <DeleteModal
+          onClose={() => setShowDelete(false)}
+          onDelete={async () => {
+            await fetch(`/api/jobs/${id}`, { method: "DELETE" });
+            router.push("/jobs");
+          }}
+        />
+      )}
     </div>
   );
 }

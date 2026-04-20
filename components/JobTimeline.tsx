@@ -35,7 +35,7 @@ export default function JobTimeline({
 
               {/* DOT */}
               <div
-                className={`w-6 h-6 flex items-center justify-center rounded-full border-2 z-10 transition
+                className={`w-6 h-6 flex items-center justify-center rounded-full  z-10 transition
                 ${
                   isFailed
                     ? "border-red-500 bg-red-100 dark:bg-red-900/20"
@@ -63,7 +63,7 @@ export default function JobTimeline({
 
             {/* 🔥 RIGHT CONTENT */}
             <div
-              className={`flex-1 p-4 rounded-xl border transition-all
+              className={`flex-1 p-4 rounded-xl  transition-all
               ${
                 isActive
                   ? "bg-blue-50 border-blue-200 dark:bg-blue-900/10 dark:border-blue-800 shadow-sm"
