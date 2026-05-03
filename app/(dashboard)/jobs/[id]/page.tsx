@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ArrowLeft, Sparkles, Calendar, ChevronRight } from "lucide-react";
+import { Icon } from "@/components/ui/Icon"
 import Link from "next/link";
 
-import Sidebar from "@/components/navigation/navigation";
 import JobHeader from "@/components/job-detail/JobHeader";
 import JobInfoGrid from "@/components/job-detail/JobInfoGrid";
 import JobTimelineSection from "@/components/job-detail/JobTimelineSection";
@@ -40,7 +39,7 @@ export default function JobDetailPage() {
     <div className="flex items-center justify-center min-h-screen bg-[#F8FAFC] dark:bg-[#020617]">
       <div className="animate-pulse flex flex-col items-center gap-4">
         <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center">
-          <Sparkles className="text-blue-500 animate-spin" size={24} />
+          <Icon name="sparkles" className="text-blue-500 animate-spin" size={24} />
         </div>
         <p className="text-slate-500 font-medium">Loading...</p>
       </div>
@@ -49,9 +48,9 @@ export default function JobDetailPage() {
 
   return (
     <div className="flex min-h-screen bg-[#F8FAFC] dark:bg-[#020617]">
-      <Sidebar />
+      {/* <Sidebar /> */}
 
-      <main className="flex-1 md:pl-64">
+      <main className="flex-1">
         <div className="max-w-7xl mx-auto p-4 md:p-8 lg:p-10 space-y-8">
           
           {/* TOP NAV & BREADCRUMB */}
@@ -61,12 +60,12 @@ export default function JobDetailPage() {
                 onClick={() => router.push('/jobs')}
                 className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-all shadow-sm"
               >
-                <ArrowLeft size={20} />
+                <Icon name="arrowleft" size={20} />
               </button>
               <div className="hidden sm:block">
                 <div className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-widest">
                   <span>Applications</span>
-                  <ChevronRight size={12} />
+                  <Icon name="chevronright" size={12} />
                   <span className="text-blue-600 dark:text-blue-400">Details</span>
                 </div>
               </div>
@@ -74,8 +73,10 @@ export default function JobDetailPage() {
 
             <div className="flex items-center gap-3">
                <JobActionMenu
+                  job={job}
                   onEdit={() => setEditing(true)}
                   onDelete={() => setShowDelete(true)}
+                  onRefresh={fetchJob}
                 />
             </div>
           </nav>
@@ -131,7 +132,7 @@ export default function JobDetailPage() {
             </div>
 
             {/* RIGHT SIDE: Summary / Support Info (4 Columns) */}
-            <aside className="lg:col-span-4 space-y-6">
+            <aside className="mb-[95px] md:mb-0 lg:col-span-4 space-y-6 ">
                <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-3xl p-8 text-white shadow-xl shadow-blue-500/20">
                   <h4 className="font-bold text-lg mb-2">Good Luck! 🚀</h4>
                   <p className="text-blue-100 text-sm leading-relaxed">
@@ -142,7 +143,7 @@ export default function JobDetailPage() {
                         <span className="text-blue-200 text-[10px] uppercase font-bold tracking-wider">Status</span>
                         <span className="font-bold uppercase tracking-tight">{job.status}</span>
                      </div>
-                     <Calendar size={24} className="opacity-40" />
+                     <Icon name="calendar" size={24} className="opacity-40" />
                   </div>
                </div>
 
@@ -158,6 +159,7 @@ export default function JobDetailPage() {
         </div>
       </main>
 
+      {/* show modal delete */}
       {showDelete && (
         <DeleteModal
           onClose={() => setShowDelete(false)}
@@ -167,6 +169,7 @@ export default function JobDetailPage() {
           }}
         />
       )}
+
     </div>
   );
 }

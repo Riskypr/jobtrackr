@@ -7,7 +7,7 @@ export async function GET(
   context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await context.params; // 🔥 FIX DI SINI
+    const { id } = await context.params;
 
     const job = await prisma.jobApplication.findUnique({
       where: { id },
@@ -23,7 +23,6 @@ export async function GET(
     return NextResponse.json(job);
   } catch (error) {
     console.error("GET DETAIL ERROR:", error);
-
     return NextResponse.json(
       { error: "Failed to fetch job" },
       { status: 500 }
@@ -31,7 +30,7 @@ export async function GET(
   }
 }
 
-// update timeline (PATCH)
+// UPDATE (Timeline, Status, atau Info lainnya)
 export async function PATCH(
   req: Request,
   context: { params: Promise<{ id: string }> }
@@ -40,19 +39,22 @@ export async function PATCH(
     const { id } = await context.params;
     const body = await req.json();
 
+    // Kita gunakan spread operator agar API ini fleksibel:
+    // Bisa digunakan untuk update status saja, atau steps saja, atau semuanya.
     const job = await prisma.jobApplication.update({
       where: { id },
       data: {
-        status: body.status,
-        steps: body.steps, // 🔥 penting
-        notes: body.notes,
+        ...(body.status && { status: body.status }),
+        ...(body.steps && { steps: body.steps }),
+        ...(body.notes !== undefined && { notes: body.notes }),
+        ...(body.company && { company: body.company }),
+        ...(body.role && { role: body.role }),
       },
     });
 
     return NextResponse.json(job);
   } catch (error) {
     console.error("UPDATE ERROR:", error);
-
     return NextResponse.json(
       { error: "Failed to update job" },
       { status: 500 }
@@ -84,7 +86,6 @@ export async function DELETE(
     });
   } catch (error) {
     console.error("DELETE ERROR:", error);
-
     return NextResponse.json(
       { error: "Failed to delete job" },
       { status: 500 }

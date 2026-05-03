@@ -4,6 +4,7 @@ const statusLabel: Record<string, string> = {
   INTERVIEW: "Interview",
   ACCEPTED: "Accepted",
   REJECTED: "Rejected",
+  NO_RESPONSE: "No Response",
 };
 
 export default function StatusFilter({

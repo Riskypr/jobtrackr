@@ -7,7 +7,7 @@ const COLORS = {
   1: "bg-blue-100 dark:bg-blue-900/30",
   2: "bg-blue-300 dark:bg-blue-700/50",
   3: "bg-blue-500 dark:bg-blue-500",
-  4: "bg-blue-700 dark:bg-blue-400", // Di dark mode pakai blue-400 supaya lebih "glow"
+  4: "bg-blue-700 dark:bg-blue-400", 
 };
 
 function getLevel(count: number) {
@@ -63,17 +63,14 @@ export default function YearDistribution({ jobs }: { jobs: any[] }) {
   }, [jobs]);
 
   return (
-    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-4 rounded-2xl shadow-sm transition-colors duration-300">
-      <h2 className="text-sm font-semibold mb-4 text-gray-600 dark:text-gray-300">
-        Activity Overview
-      </h2>
+    <div className="bg-white dark:bg-gray-900 dark:border-gray-800 p-4 rounded-2xl transition-colors duration-300">
 
       {/* CONTAINER SCROLL */}
       <div className="overflow-x-auto pb-2 custom-scrollbar">
         <div className="inline-flex flex-col">
           
           {/* LABEL BULAN */}
-          <div className="flex gap-[6px] mb-2">
+          <div className="flex gap-[18px] mb-2">
             {weeks.map((week, i) => {
               const month = week[0].date.getMonth();
               const prevMonth = weeks[i - 1]?.[0]?.date?.getMonth?.();
@@ -98,7 +95,7 @@ export default function YearDistribution({ jobs }: { jobs: any[] }) {
                   <div
                     key={j}
                     title={`${day.key} • ${day.count} activity`}
-                    className={`w-3 h-3 rounded-sm flex-shrink-0 transition-colors ${
+                    className={`w-6 h-6 rounded-sm flex-shrink-0 transition-colors ${
                       COLORS[day.level as 0 | 1 | 2 | 3 | 4]
                     }`}
                   />

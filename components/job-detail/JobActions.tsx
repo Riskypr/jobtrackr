@@ -65,14 +65,15 @@ export default function JobActionMenu({ job, onEdit, onDelete, onRefresh }: any)
           </div>
         </div>
       )}
-
+      
+      {/* job status modal */}
       {showStatusModal && (
         <StatusUpdateModal 
           job={job} 
           onClose={() => setShowStatusModal(false)} 
           onSuccess={() => {
             setShowStatusModal(false);
-            onRefresh(); // Callback untuk reload data
+            onRefresh(); 
           }}
         />
       )}

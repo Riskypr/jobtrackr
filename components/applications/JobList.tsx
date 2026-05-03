@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import JobCard from "../JobCard";
 import Pagination from "../pagination/PaginationTmp";
+import { Icon } from "../ui/Icon";
 
 export default function JobGrid({ jobs }: { jobs: any[] }) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,11 +19,12 @@ export default function JobGrid({ jobs }: { jobs: any[] }) {
     return jobs.slice(startIndex, startIndex + itemsPerPage);
   }, [jobs, currentPage]);
 
-  // Handle Empty State langsung di sini
   if (jobs.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-20 px-4 text-center bg-gray-50 dark:bg-gray-800/20 rounded-3xl border-2 border-dashed border-gray-200 dark:border-gray-800">
-        <div className="text-4xl mb-4">🚀</div>
+        <div className="mb-4">
+          <Icon name="database" size={50} color="#6B7280" />
+        </div>
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
           No applications yet
         </h3>

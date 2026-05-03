@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Building2, Briefcase, Calendar } from "lucide-react";
+import { Building2, Briefcase, Calendar, Plus, Loader2, Sparkles } from "lucide-react";
 
 export default function AddJobForm({
   onSuccess,
@@ -20,20 +20,13 @@ export default function AddJobForm({
     try {
       await fetch("/api/jobs", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          company,
-          position,
-          appliedAt,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ company, position, appliedAt }),
       });
 
       setCompany("");
       setPosition("");
       setAppliedAt("");
-
       onSuccess?.();
     } catch (err) {
       console.error("Error adding job:", err);
@@ -43,96 +36,104 @@ export default function AddJobForm({
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="space-y-5"
-    >
-      {/* 🔥 HEADER */}
-      <div>
-        <h2 className="text-2xl  font-semibold text-gray-900 dark:text-white">
-          Add Job Application
+    <form onSubmit={handleSubmit} className="space-y-8 px-6 py-4">
+      
+      {/* --- HEADER SECTION --- */}
+      <div className="relative">
+        <div className="absolute -left-5 top-1 w-1.5 h-10 bg-blue-600 rounded-full shadow-[0_0_15px_rgba(37,99,235,0.5)]" />
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">
+          New Opportunity
         </h2>
-        <p className="text-md text-gray-500">
-          Track your new opportunity 🚀
+        <p className="text-slate-500 dark:text-slate-400 text-sm font-medium mt-1 flex items-center gap-2">
+          Ready to track your next big move? <Sparkles size={14} className="text-blue-500 animate-pulse" />
         </p>
       </div>
 
-      {/* 🔥 INPUT GROUP */}
-      <div className="space-y-4">
-
-        {/* COMPANY */}
-        <div className="space-y-1">
-          <label className="text-md text-gray-500">Company</label>
-
-          <div className="flex items-center gap-2 px-3 py-2 rounded-xl border 
-          bg-white/70 backdrop-blur 
-          dark:bg-gray-800 dark:border-gray-700 focus-within:ring-2 focus-within:ring-blue-500">
-
-            <Building2 size={20} className="text-gray-400" />
-
+      {/* --- INPUT GROUP --- */}
+      <div className="space-y-6">
+        
+        {/* COMPANY FIELD */}
+        <div className="group space-y-2">
+          <label className="text-[10px] uppercase font-bold tracking-[0.2em] text-slate-400 group-focus-within:text-blue-600 transition-colors ml-1">
+             Company name
+          </label>
+          <div className="relative flex items-center">
+            <div className="absolute left-4 text-slate-400 group-focus-within:text-blue-500 transition-colors">
+              <Building2 size={18} strokeWidth={2.5} />
+            </div>
             <input
               type="text"
-              placeholder="e.g. Google"
+              placeholder="e.g. Google, Stripe, Tesla"
               value={company}
               onChange={(e) => setCompany(e.target.value)}
               required
-              className="w-full bg-transparent outline-none text-md text-gray-800 dark:text-white placeholder-gray-400 p-2"
+              className="w-full pl-12 pr-4 py-4 rounded-[1.25rem] bg-slate-50 dark:bg-slate-800/50 border-2 border-blue-400 focus:border-blue-600 focus:bg-white dark:focus:bg-slate-800 outline-none text-slate-900 dark:text-white font-medium transition-all placeholder:text-slate-300 dark:placeholder:text-slate-600 shadow-sm"
             />
           </div>
         </div>
 
-        {/* POSITION */}
-        <div className="space-y-1">
-          <label className="text-md text-gray-500">Position</label>
-
-          <div className="flex items-center gap-2 px-3 py-2 rounded-xl border 
-          bg-white/70 backdrop-blur 
-          dark:bg-gray-800 dark:border-gray-700 focus-within:ring-2 focus-within:ring-blue-500">
-
-            <Briefcase size={20} className="text-gray-400" />
-
+        {/* POSITION FIELD */}
+        <div className="group space-y-2">
+          <label className="text-[10px] uppercase font-bold tracking-[0.2em] text-slate-400 group-focus-within:text-blue-600 transition-colors ml-1">
+            Job Position
+          </label>
+          <div className="relative flex items-center">
+            <div className="absolute left-4 text-slate-400 group-focus-within:text-blue-500 transition-colors">
+              <Briefcase size={18} strokeWidth={2.5} />
+            </div>
             <input
               type="text"
-              placeholder="e.g. Frontend Developer"
+              placeholder="e.g. Senior Frontend Engineer"
               value={position}
               onChange={(e) => setPosition(e.target.value)}
               required
-              className="w-full p-2 bg-transparent outline-none text-md text-gray-800 dark:text-white placeholder-gray-400"
+              className="w-full pl-12 pr-4 py-4 rounded-[1.25rem] bg-slate-50 dark:bg-slate-800/50 border-2 border-blue-400 focus:border-blue-600 focus:bg-white dark:focus:bg-slate-800 outline-none text-slate-900 dark:text-white font-medium transition-all placeholder:text-slate-300 dark:placeholder:text-slate-600 shadow-sm"
             />
           </div>
         </div>
 
-        {/* DATE */}
-        <div className="space-y-1">
-          <label className="text-md text-gray-500">Applied Date</label>
-
-          <div className="flex items-center gap-2 px-3 py-2 rounded-xl border 
-          bg-white/70 backdrop-blur 
-          dark:bg-gray-800 dark:border-gray-700 focus-within:ring-2 focus-within:ring-blue-500">
-
-            <Calendar size={20} className="text-gray-400" />
-
+        {/* DATE FIELD */}
+        <div className="group space-y-2">
+          <label className="text-[10px] uppercase font-bold tracking-[0.2em] text-slate-400 group-focus-within:text-blue-600 transition-colors ml-1">
+            Application Date
+          </label>
+          <div className="relative flex items-center">
+            <div className="absolute left-4 text-slate-400 group-focus-within:text-blue-500 transition-colors">
+              <Calendar size={18} strokeWidth={2.5} />
+            </div>
             <input
               type="date"
               value={appliedAt}
               onChange={(e) => setAppliedAt(e.target.value)}
-              className="w-full p-2 bg-transparent outline-none text-md text-gray-800 dark:text-white"
+              required
+              className="w-full pl-12 pr-4 py-4 rounded-[1.25rem] bg-slate-50 dark:bg-slate-800/50 border-2 border-blue-400 focus:border-blue-600 focus:bg-white dark:focus:bg-slate-800 outline-none text-slate-900 dark:text-white font-medium transition-all shadow-sm [color-scheme:light] dark:[color-scheme:dark]"
             />
           </div>
         </div>
       </div>
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full py-4 rounded-xl font-medium text-white 
-        bg-gradient-to-r from-blue-600 to-indigo-600 
-        hover:scale-[1.02] hover:shadow-lg 
-        transition-all duration-200 
-        disabled:opacity-50"
-      >
-        {loading ? "Adding..." : "Add Job"}
-      </button>
+      {/* --- ACTION BUTTON --- */}
+      <div className="pt-2">
+        <button
+          type="submit"
+          disabled={loading}
+          className="relative w-full group overflow-hidden"
+        > 
+          <div className="relative flex items-center justify-center gap-3 py-6 rounded-[1.25rem] bg-blue-700 hover:bg-blue-800 dark:bg-white text-white dark:text-slate-900 font-bold uppercase tracking-[0.2em] text-[11px] shadow-2xl transition-all active:translate-y-[0px] active:scale-[0.98] disabled:opacity-70">
+            {loading ? (
+              <>
+                <Loader2 size={16} className="animate-spin" />
+                <span>Processing...</span>
+              </>
+            ) : (
+              <>
+                <Plus size={16} strokeWidth={3} />
+                <span>Add Application</span>
+              </>
+            )}
+          </div>
+        </button>
+      </div>
     </form>
   );
 }

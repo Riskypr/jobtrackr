@@ -1,14 +1,8 @@
 import { formatDistanceToNow } from "date-fns";
 import StatusBadge from "./StatusBadge";
 import { useRouter } from "next/navigation";
+import { Icon } from "@/components/ui/Icon"
 
-
-import {
-  Building2,
-  Briefcase,
-  Clock,
-  ArrowRight,
-} from "lucide-react";
 
 type Job = {
   id: string;
@@ -19,25 +13,24 @@ type Job = {
 };
 
 
-
 export default function JobCard({ job }: { job: Job }) {
   const router = useRouter();
-  
+
   return (
     <div
-    onClick={() => router.push(`/jobs/${job.id}`)}
-    className="group relative p-5 rounded-2xl border 
+      onClick={() => router.push(`/jobs/${job.id}`)}
+      className="group cursor-pointer relative p-5 rounded-2xl border 
     bg-white/70 backdrop-blur 
     dark:bg-gray-900 dark:border-gray-800
-    hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+    hover:shadow-xl hover:-translate-y-1 transition-all duration-300 ">
 
       {/* TOP BAR */}
       <div className="flex justify-between items-start mb-3">
-        
+
         <div className="flex items-start gap-3">
           {/* ICON */}
           <div className="p-2 rounded-xl bg-blue-100 dark:bg-gray-800">
-            <Briefcase className="text-blue-600 dark:text-blue-400" size={18} />
+            <Icon name="briefcase" className="text-blue-600 dark:text-blue-400" size={18} />
           </div>
 
           {/* TITLE */}
@@ -46,8 +39,8 @@ export default function JobCard({ job }: { job: Job }) {
               {job.position}
             </h2>
 
-            <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
-              <Building2 size={14} />
+            <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+              <Icon name="building2" size={14} />
               {job.company}
             </div>
           </div>
@@ -65,7 +58,7 @@ export default function JobCard({ job }: { job: Job }) {
 
         {/* TIME */}
         <div className="flex items-center gap-1 text-xs text-gray-400">
-          <Clock size={14} />
+          <Icon name="clock" size={14} />
           Applied{" "}
           {formatDistanceToNow(new Date(job.appliedAt), {
             addSuffix: true,
@@ -73,10 +66,10 @@ export default function JobCard({ job }: { job: Job }) {
         </div>
 
 
-        <button 
-        className="flex items-center gap-1 text-xs font-medium text-blue-600 dark:text-blue-400 hover:gap-2 transition-all">
+        <button
+          className="flex items-center gap-1 text-xs font-medium text-blue-600 dark:text-blue-400 hover:gap-2 transition-all">
           View
-          <ArrowRight size={14} />
+          <Icon name="arrowright" size={14} />
         </button>
       </div>
 

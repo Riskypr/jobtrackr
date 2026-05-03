@@ -1,4 +1,4 @@
-import { X } from "lucide-react";
+import { Icon } from "@/components/ui/Icon"
 import AddJobForm from "@/components/AddJobForm";
 
 export default function AddJobModal({
@@ -17,7 +17,7 @@ export default function AddJobModal({
           onClick={() => setOpen(false)}
           className="absolute top-3 right-3 text-gray-400"
         >
-          <X size={30} />
+          <Icon name="x" size={30} />
         </button>
 
         <AddJobForm

@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Lexend } from "next/font/google";
+import { Geist, Geist_Mono, Nunito } from "next/font/google"; 
 import "./globals.css";
+import { SessionProvider } from "next-auth/react";
 import { Providers } from "./providers";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,29 +15,28 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const lexend = Lexend({
-  variable: "--font-lexend",
+// Inisialisasi Nunito
+const nunito = Nunito({
+  variable: "--font-nunito",
   subsets: ["latin"],
+  weight: ["200", "300", "400", "500", "600", "700", "800", "900", "1000"],
 });
-
 
 export const metadata: Metadata = {
   title: "JobTrackr - Your Job Application Tracker",
-  description: "Track your job applications, interviews, and offers all in one place with JobTrackr. Stay organized and never miss an opportunity!",
+  description: "Track your job applications, interviews, and offers all in one place with JobTrackr.",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="en" suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col"> 
-        <Providers>{children}</Providers>
+    <html lang="en" suppressHydrationWarning className={`${nunito.variable} h-full`}>
+      <body className={`${nunito.className} antialiased bg-[#F8FAFC] dark:bg-[#020617]`}>
+        <Providers>
+          <SessionProvider>
+            <Toaster position="top-right" />
+            {children} 
+          </SessionProvider>
+        </Providers>
       </body>
     </html>
   );

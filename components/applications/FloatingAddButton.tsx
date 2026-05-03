@@ -1,4 +1,4 @@
-import { Plus } from "lucide-react";
+import { Icon } from "@/components/ui/Icon";
 
 export default function FloatingAddButton({ onClick }: any) {
   return (
@@ -8,7 +8,7 @@ export default function FloatingAddButton({ onClick }: any) {
       bg-gradient-to-r from-blue-600 to-indigo-600 
       text-white shadow-xl hover:scale-110 transition"
     >
-      <Plus size={24} />
+      <Icon name="plus" size={24} />
     </button>
   );
 }
