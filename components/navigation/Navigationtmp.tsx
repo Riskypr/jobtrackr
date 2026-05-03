@@ -15,7 +15,8 @@ import {
   Zap,
   Settings,
   Sun,
-  Moon
+  Moon,
+  Sparkle
 } from "lucide-react";
 
 export default function Navigation() {
@@ -39,6 +40,7 @@ export default function Navigation() {
   const menu = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "Applications", href: "/jobs", icon: Briefcase },
+    { name: "AI Cover Letter", href: "/ai-cover-letter", icon: Sparkle },
   ];
 
   return (

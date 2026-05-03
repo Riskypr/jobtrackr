@@ -14,36 +14,52 @@ export default function EditProfileModal({ isOpen, onClose, currentUser, onSucce
   const { update } = useSession(); 
   const router = useRouter();
 
-    const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
-        const res = await fetch("/api/user/update", {
+      const res = await fetch("/api/user/update", {
         method: "PATCH",
         body: JSON.stringify({ name }),
         headers: { "Content-Type": "application/json" },
-        });
+      });
 
-        if (!res.ok) throw new Error("Gagal update");
+      if (!res.ok) throw new Error("Gagal update");
 
-        const data = await res.json();
+      const data = await res.json();
 
-        await update({
+      await update({
         ...currentUser,
         name: data.user.name,
         image: data.user.image,
-        });
+      });
 
-        toast.success("Profile updated!");
-        onClose(); 
-
+    
+      toast.success("Profile updated!", {
+        className:
+          "bg-white dark:bg-slate-900 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-800 shadow-2xl rounded-2xl p-4 font-bold text-sm",
+        iconTheme: {
+          primary: "#2563eb", 
+          secondary: "#fff",
+        },
+      });
+      
+      onClose();
     } catch (err) {
-        toast.error("Something went wrong");
+  
+      toast.error("Something went wrong", {
+        className:
+          "bg-white dark:bg-slate-900 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-800 shadow-2xl rounded-2xl p-4 font-bold text-sm",
+        iconTheme: {
+          primary: "#ef4444", 
+          secondary: "#fff",
+        },
+      });
     } finally {
-        setIsSubmitting(false);
+      setIsSubmitting(false);
     }
-    };
+  };
 
   if (!isOpen) return null;
   return (
@@ -65,7 +81,6 @@ export default function EditProfileModal({ isOpen, onClose, currentUser, onSucce
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            // Hapus fixed, top, left, dan translate dari sini
             className="w-full max-w-md bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800"
         >
             <div className="p-8">
