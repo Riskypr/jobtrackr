@@ -12,7 +12,7 @@ export default function Dashboard() {
   const { jobs } = useJobs();
 
   const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 5 }, (_, i) => currentYear - i);
+  const years = Array.from({ length: 6 }, (_, i) => currentYear - i);
   const [yearFilter, setYearFilter] = useState(currentYear);
 
   const filteredJobs = (jobs || []).filter((job: any) => {
