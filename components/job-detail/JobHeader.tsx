@@ -22,13 +22,6 @@ export default function JobHeader({ job, onDelete }: any) {
 
       <div className="flex items-center gap-3">
         <StatusBadge status={job.status} />
-
-        {/* <button
-          onClick={onDelete}
-          className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg"
-        >
-          <Trash size={20} />
-        </button> */}
       </div>
 
     </div>

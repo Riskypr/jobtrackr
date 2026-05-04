@@ -61,7 +61,7 @@ const STATUSES = [
   },
 ];
 
-export default function StatusUpdateModal({ job, onClose, onSuccess }: any) {
+export default function StatusUpdateModal({ job, onClose, onSuccess, onRefresh }: any) {
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState(job?.status);
 
@@ -94,7 +94,7 @@ export default function StatusUpdateModal({ job, onClose, onSuccess }: any) {
         onClick={onClose} 
       />
       
-      <div className="relative bg-white dark:bg-slate-900 w-full max-w-[440px] rounded-2xl shadow-2xl p-8 border border-slate-200 dark:border-slate-800 animate-in zoom-in-95 slide-in-from-bottom-4 duration-300">
+      <div className="relative w-full max-w-[520px] max-h-[90vh] overflow-y-auto bg-white dark:bg-slate-900 rounded-2xl shadow-2xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 animate-in zoom-in-95 slide-in-from-bottom-4 duration-300">
         
         {/* Close Button */}
         <button 
