@@ -13,7 +13,7 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-// TABEL UTAMA USER (Sesuai Standar NextAuth + Relasi Job)
+// TABEL UTAMA USER 
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -30,7 +30,7 @@ model User {
   updatedAt     DateTime  @updatedAt
 }
 
-// TABEL PENDUKUNG NEXTAUTH (WAJIB ADA)
+// TABEL PENDUKUNG NEXTAUTH 
 model Account {
   id                 String  @id @default(cuid())
   userId             String
@@ -58,19 +58,22 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-// UPDATE MODEL JOB APPLICATION (Tambah userId)
+// MODEL JOB APPLICATION 
 model JobApplication {
-  id          String   @id @default(uuid())
-  company     String
-  position    String
-  status      Status   @default(APPLIED)
-  appliedAt   DateTime
-  lastUpdate  DateTime @updatedAt
-  steps       Json     @default("[]")
+  id           String   @id @default(uuid())
+  company      String
+  position     String
+  location     String?  
+  requirements String?  @db.Text 
+  
+  status       Status   @default(APPLIED)
+  appliedAt    DateTime
+  lastUpdate   DateTime @updatedAt
+  steps        Json     @default("[]")
 
   // Menghubungkan Job ke User
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum Status {

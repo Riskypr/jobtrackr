@@ -40,7 +40,6 @@ export async function PATCH(
     const body = await req.json();
 
     // Kita gunakan spread operator agar API ini fleksibel:
-    // Bisa digunakan untuk update status saja, atau steps saja, atau semuanya.
     const job = await prisma.jobApplication.update({
       where: { id },
       data: {

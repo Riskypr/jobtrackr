@@ -39,7 +39,7 @@ export default function JobDetailPage() {
     <div className="flex items-center justify-center min-h-screen bg-[#F8FAFC] dark:bg-[#020617]">
       <div className="animate-pulse flex flex-col items-center gap-4">
         <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center">
-          <Icon name="sparkles" className="text-blue-500 animate-spin" size={24} />
+          <Icon name="rotate-cw" className="text-blue-500 animate-spin" size={24} />
         </div>
         <p className="text-slate-500 font-medium">Loading...</p>
       </div>

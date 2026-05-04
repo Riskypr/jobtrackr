@@ -4,33 +4,6 @@ import { auth } from "@/lib/auth"; // Sesuaikan dengan path file auth Anda
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-// GET: Hanya mengambil lowongan milik user yang sedang login
-// export async function GET() {
-//   try {
-//     const session = await auth();
-//     // console.log("ISI SESSION:", session);
-
-//     if (!session?.user?.id) {
-//       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-//     }
-
-//     const jobs = await prisma.jobApplication.findMany({
-//       where: {
-//         userId: session.user.id, // Filter berdasarkan ID user
-//       },
-//       orderBy: { appliedAt: "desc" },
-//     });
-
-//     return NextResponse.json(jobs);
-//   } catch (error) {
-//     console.error("GET ERROR:", error);
-//     return NextResponse.json(
-//       { error: "Failed to fetch jobs" },
-//       { status: 500 }
-//     );
-//   }
-// }
-
 export async function GET() {
   try {
     const session = await auth();
@@ -91,10 +64,12 @@ export async function POST(req: Request) {
       data: {
         company: body.company,
         position: body.position,
+        location: body.location || null,
+        requirements: body.requirements || null,
         status: "APPLIED",
         appliedAt: appliedDate,
         userId: session.user.id, // Hubungkan dengan user yang login
-        // Jika field 'steps' di schema Anda adalah tipe JSON:
+        
         steps: [
           {
             name: "Apply",

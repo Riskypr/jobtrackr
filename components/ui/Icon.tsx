@@ -24,6 +24,7 @@ import {
   Mail,
   Heart,
   Plus,
+  RotateCw,
   Save, 
   Search,
   Settings,
@@ -62,6 +63,7 @@ export type IconName =
   | "moon"
   | "heart" 
   | "mail"
+  | "rotate-cw"
   | "sun"
   | "save" 
   | "user" 
@@ -106,6 +108,7 @@ const icons = {
   mail: Mail,
   sun: Sun,
   user: User,
+  "rotate-cw": RotateCw,
   target: Target,
   "trending-up": TrendingUp,
   trash2: Trash2,
