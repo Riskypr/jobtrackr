@@ -12,7 +12,6 @@ export default function ProfilePage() {
   const { data: session, update } = useSession();
   const user = session?.user;
 
-  // Animasi variants (tetap sama)
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { 
@@ -156,7 +155,6 @@ export default function ProfilePage() {
                 </div>
               </div>
               
-              {/* Banner (tetap sama) */}
               <div className="relative p-8 rounded-3xl bg-gradient-to-br from-blue-600 to-indigo-700 overflow-hidden">
                 <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
                   <div className="flex items-center gap-5">
