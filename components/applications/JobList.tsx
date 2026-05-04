@@ -51,7 +51,7 @@ export default function JobGrid({ jobs }: { jobs: any[] }) {
           totalPages={totalPages}
           onPageChange={(page) => {
             setCurrentPage(page);
-            window.scrollTo({ top: 0, behavior: "smooth" }); //  Scroll ke atas saat ganti halaman
+            window.scrollTo({ top: 0, behavior: "smooth" }); 
           }}
         />
       </div>

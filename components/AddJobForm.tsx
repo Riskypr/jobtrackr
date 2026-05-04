@@ -6,7 +6,7 @@ import {
   Plus, Upload, Building2, MapPin, ChevronRight, CheckCircle2 
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import toast from "react-hot-toast";
+import { notify } from "@/utils/notification"; 
 
 interface AddJobFormProps {
   setOpen: (open: boolean) => void;
@@ -28,7 +28,8 @@ export default function AddJobForm({ setOpen, fetchJobs }: AddJobFormProps) {
   };
 
   const handleParse = async () => {
-    if (!jobDescription) return toast.error("Please enter the job description text first.");
+    if (!jobDescription) return notify.error("Please enter the job description text first.");
+    
     setIsParsing(true);
     try {
       const response = await fetch("/api/jobs/parse-ai", {
@@ -48,10 +49,10 @@ export default function AddJobForm({ setOpen, fetchJobs }: AddJobFormProps) {
         appliedAt: formData.appliedAt
       });
 
-      toast.success("AI successfully extracted data!");
+      notify.success("AI successfully extracted data!");
       setMode("manual");
     } catch (error: any) {
-      toast.error(error.message);
+      notify.error(error.message);
     } finally {
       setIsParsing(false);
     }
@@ -60,6 +61,7 @@ export default function AddJobForm({ setOpen, fetchJobs }: AddJobFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    
     try {
       const response = await fetch("/api/jobs", {
         method: "POST",
@@ -67,11 +69,12 @@ export default function AddJobForm({ setOpen, fetchJobs }: AddJobFormProps) {
         body: JSON.stringify(formData),
       });
       if (!response.ok) throw new Error("Failed to save.");
-      toast.success("Job posting added!");
+      
+      notify.success("Job posting added!");
       setOpen(false);
       fetchJobs();
     } catch (error: any) {
-      toast.error(error.message);
+      notify.error(error.message);
     } finally {
       setIsSubmitting(false);
     }
@@ -231,8 +234,6 @@ export default function AddJobForm({ setOpen, fetchJobs }: AddJobFormProps) {
                 </div>
               ))}
             </div>
-
-
           </div>
         </div>
       </div>

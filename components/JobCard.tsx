@@ -36,7 +36,7 @@ export default function JobCard({ job }: { job: Job }) {
           {/* TITLE */}
           <div>
             <h2 className="font-semibold text-lg text-gray-900 dark:text-white">
-              {job.position}
+              {job.position ? job.position.charAt(0).toUpperCase() + job.position.slice(1).toLowerCase() : ""}
             </h2>
 
             <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">

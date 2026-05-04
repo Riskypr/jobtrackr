@@ -14,10 +14,19 @@ export default function ApplicationsPage() {
   const { jobs, fetchJobs } = useJobs();
   const [open, setOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState("ALL");
+  const [searchQuery, setSearchQuery] = useState(""); // State untuk search
 
-  const filteredJobs = jobs.filter((job: any) =>
-    statusFilter === "ALL" || job.status === statusFilter
-  );
+  // Filter jobs berdasarkan status dan input pencarian
+  const filteredJobs = jobs.filter((job: any) => {
+    const matchesStatus = statusFilter === "ALL" || job.status === statusFilter;
+    
+    const searchLower = searchQuery.toLowerCase();
+    const matchesSearch = 
+      (job.position && job.position.toLowerCase().includes(searchLower)) ||
+      (job.company && job.company.toLowerCase().includes(searchLower));
+
+    return matchesStatus && matchesSearch;
+  });
 
   return (
     <div className="flex min-h-screen bg-[#F8FAFC] dark:bg-[#020617] transition-colors duration-300">
@@ -27,8 +36,6 @@ export default function ApplicationsPage() {
       <main className="flex-1">
         <div className="max-w-[1400px] p-4 md:p-8 lg:p-10 space-y-8">
           
-          {/* <Header /> */}
-
           {/* PAGE HEADER SECTION */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-blue-800 dark:bg-slate-900/40 p-6 rounded-2xl md:rounded-3xl border border-slate-200 dark:border-slate-800 backdrop-blur-sm">
             <div className="space-y-1">
@@ -65,10 +72,16 @@ export default function ApplicationsPage() {
               />
             </div>
             
-            {/* SEARCH PLACEHOLDER (Optional visual) */}
-            <div className="hidden lg:flex items-center gap-2 bg-slate-100 dark:bg-slate-800 px-4 py-2 rounded-xl text-slate-400 min-w-[250px]">
+            {/* SEARCH INPUT */}
+            <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 px-4 py-2 rounded-xl text-slate-400 w-full md:w-auto min-w-[250px]">
               <Icon name="search" size={16} />
-              <span className="text-sm">Search applications...</span>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search applications..."
+                className="bg-transparent border-none outline-none text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 w-full"
+              />
             </div>
           </div>
 
@@ -77,7 +90,6 @@ export default function ApplicationsPage() {
             <JobList jobs={filteredJobs} />
           </div>
         </div>
-        
       </main>
 
       {/* FLOATING ACTION BUTTON (Mobile Only) */}
