@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Sparkles, Loader2, Copy, Check, Briefcase, FileText, Download } from "lucide-react";
-import toast from "react-hot-toast";
+import { notify } from "@/utils/notification";
 
 export default function CoverLetterPage() {
   const [companyName, setCompanyName] = useState("");
@@ -16,7 +16,7 @@ export default function CoverLetterPage() {
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!jobDescription || !resumeData || !companyName || !position) {
-      toast.error("Mohon lengkapi semua form terlebih dahulu!");
+      notify.error("Please fill out all fields first!");
       return;
     }
 
@@ -38,13 +38,13 @@ export default function CoverLetterPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Gagal membuat draf");
+        throw new Error(data.error || "Failed to generate draft");
       }
 
       setCoverLetter(data.coverLetter);
-      toast.success("Draf surat lamaran berhasil dibuat!");
+      notify.success("Cover letter draft generated successfully!");
     } catch (error: any) {
-      toast.error(error.message || "Terjadi kesalahan, coba lagi.");
+      notify.error(error.message || "An error occurred, please try again.");
     } finally {
       setIsGenerating(false);
     }
@@ -54,23 +54,22 @@ export default function CoverLetterPage() {
     if (!coverLetter) return;
     navigator.clipboard.writeText(coverLetter);
     setIsCopied(true);
-    toast.success("Berhasil disalin ke clipboard!");
+    notify.success("Copied to clipboard successfully!");
     setTimeout(() => setIsCopied(false), 2000);
   };
 
-  // Fungsi untuk download file Word (.doc) yang kompatibel dengan Word 2019/ke bawah
+  // Function to download Word file (.doc) compatible with Word 2019 and below
   const exportToWord = () => {
     if (!coverLetter) return;
     
-    // Menggunakan ekstensi .doc dan tipe data teks sederhana agar kompatibel di Word lama
     const blob = new Blob([coverLetter], { type: "application/msword;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `Surat_Lamaran_${companyName.replace(/\s+/g, "_")}.doc`;
+    link.download = `Cover_Letter_${companyName.replace(/\s+/g, "_")}.doc`;
     link.click();
     URL.revokeObjectURL(url);
-    toast.success("File Word (.doc) berhasil diunduh!");
+    notify.success("Word file (.doc) downloaded successfully!");
   };
 
   return (
@@ -82,7 +81,7 @@ export default function CoverLetterPage() {
         </h1>
         <p className="text-slate-500 dark:text-slate-400 font-medium flex items-center gap-2 text-sm">
           <Sparkles size={16} className="text-yellow-500 fill-yellow-500" />
-          Otomasi pembuatan surat lamaran untuk melamar pekerjaan secara cepat dan personal.
+          Automate the creation of cover letters for fast and personalized job applications.
         </p>
       </div>
 
@@ -90,35 +89,35 @@ export default function CoverLetterPage() {
         {/* INPUT FORM */}
         <form onSubmit={handleGenerate} className="p-8 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
           <h2 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
-            <Briefcase size={18} className="text-blue-600" /> Masukkan Data Lowongan
+            <Briefcase size={18} className="text-blue-600" /> Enter Job Details
           </h2>
 
           <div className="space-y-4">
-            {/* Input Nama Perusahaan */}
+            {/* Input Company Name */}
             <div>
               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2 mb-2 block">
-                Nama Perusahaan
+                Company Name
               </label>
               <input
                 type="text"
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
-                placeholder="Contoh: PT. Prima Karya Sarana Sejahtera (PKSS)"
+                placeholder="e.g., TechCorp Inc."
                 className="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none text-sm font-medium transition-all text-slate-800 dark:text-slate-100"
                 required
               />
             </div>
 
-            {/* Input Posisi yang Dilamar */}
+            {/* Input Position Applied */}
             <div>
               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2 mb-2 block">
-                Posisi yang Dilamar
+                Position Applied
               </label>
               <input
                 type="text"
                 value={position}
                 onChange={(e) => setPosition(e.target.value)}
-                placeholder="Contoh: Business Support Assistant (BSA)"
+                placeholder="e.g., Software Engineer"
                 className="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none text-sm font-medium transition-all text-slate-800 dark:text-slate-100"
                 required
               />
@@ -133,22 +132,22 @@ export default function CoverLetterPage() {
                 rows={5}
                 value={jobDescription}
                 onChange={(e) => setJobDescription(e.target.value)}
-                placeholder="Tempel (paste) detail pekerjaan atau posisi yang Anda lamar di sini..."
+                placeholder="Paste the job details or position description here..."
                 className="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none text-sm font-medium transition-all text-slate-800 dark:text-slate-100"
                 required
               />
             </div>
 
-            {/* Input Resume */}
+            {/* Input Resume Summary */}
             <div>
               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2 mb-2 block">
-                Ringkasan Resume / Pengalaman
+                Resume Summary / Experience
               </label>
               <textarea
                 rows={3}
                 value={resumeData}
                 onChange={(e) => setResumeData(e.target.value)}
-                placeholder="Tuliskan latar belakang pendidikan, keahlian, dan pencapaian Anda..."
+                placeholder="Write about your educational background, skills, and achievements..."
                 className="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none text-sm font-medium transition-all text-slate-800 dark:text-slate-100"
                 required
               />
@@ -158,24 +157,24 @@ export default function CoverLetterPage() {
           <button
             type="submit"
             disabled={isGenerating}
-            className="w-full py-4 px-6 bg-blue-600 text-white rounded-2xl font-black text-xs uppercase hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full py-4 px-6 bg-blue-600 text-white rounded-2xl font-black text-xs uppercase hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
           >
             {isGenerating ? (
               <Loader2 className="animate-spin" size={16} />
             ) : (
               <>
-                <Sparkles size={16} /> Buat Draf Otomatis
+                <Sparkles size={16} /> Generate Draft
               </>
             )}
           </button>
         </form>
 
-        {/* OUTPUT DRAF */}
+        {/* OUTPUT DRAFT */}
         <div className="p-8 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6 min-h-[520px] flex flex-col justify-between">
           <div>
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
-                <FileText size={18} className="text-green-600" /> Hasil Draf
+                <FileText size={18} className="text-green-600" /> Draft Result
               </h3>
 
               {coverLetter && (
@@ -185,7 +184,7 @@ export default function CoverLetterPage() {
                     className="px-3 py-1.5 text-[10px] font-black uppercase text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center gap-2 hover:bg-slate-200 transition-all"
                   >
                     {isCopied ? <Check size={14} className="text-green-500" /> : <Copy size={14} />}
-                    {isCopied ? "Disalin" : "Salin"}
+                    {isCopied ? "Copied" : "Copy"}
                   </button>
                 </div>
               )}
@@ -195,9 +194,9 @@ export default function CoverLetterPage() {
               {coverLetter || (
                 <div className="h-60 flex flex-col items-center justify-center text-center text-slate-400 gap-2">
                   <Sparkles size={32} className="text-slate-300 opacity-50" />
-                  <p className="text-xs font-bold tracking-tight">Belum ada draf yang dihasilkan</p>
+                  <p className="text-xs font-bold tracking-tight">No draft generated yet</p>
                   <span className="text-[10px] text-slate-400 max-w-[280px]">
-                    Isi form di sebelah kiri lalu klik tombol untuk menghasilkan draf.
+                    Fill out the form on the left and click the button to generate a draft.
                   </span>
                 </div>
               )}
