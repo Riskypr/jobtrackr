@@ -131,7 +131,7 @@ export default function YearDistribution({
 
                           <div className="text-[9px] text-slate-500 dark:text-slate-400 mb-2">
                             {new Intl.DateTimeFormat("id-ID", {
-                              day: "2-digit",
+                              day: "numeric",
                               month: "long",
                               year: "numeric",
                             }).format(new Date(day.key))}
