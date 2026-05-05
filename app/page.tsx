@@ -46,49 +46,56 @@ export default function Home() {
       title: "Analytics",
       description: "Monitor your application progress and conversion rates with easy-to-understand metrics.",
       icon: LineChart,
-      color: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20"
+      color: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
+      iconColor: "text-blue-500 dark:text-blue-400"
     },
     {
       title: "Centralized Dashboard",
       description: "Manage all stages of your job application within a single clean and intuitive workspace.",
       icon: LayoutDashboard,
-      color: "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700"
+      color: "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700",
+      iconColor: "text-slate-500 dark:text-slate-400"
     },
     {
       title: "Timeline & Reminder",
       description: "Never miss an interview deadline again with smart, automated reminders.",
       icon: Clock,
-      color: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20"
+      color: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
+      iconColor: "text-amber-500 dark:text-amber-400"
     },
     {
       title: "AI Writing Assistant",
       description: "Generate highly personalized cover letters in just a few seconds using advanced AI.",
       icon: FileText,
-      color: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+      color: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
+      iconColor: "text-emerald-500 dark:text-emerald-400"
     },
     {
       title: "Auto-Data Extraction",
       description: "Record job details automatically using our cutting-edge AI technology.",
       icon: Cpu,
-      color: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20"
+      color: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20",
+      iconColor: "text-purple-500 dark:text-purple-400"
     },
     {
       title: "Secure Access",
       description: "Log in safely through Google SSO authentication with multi-layer security.",
       icon: Shield,
-      color: "bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20"
+      color: "bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20",
+      iconColor: "text-red-500 dark:text-red-400"
     }
   ];
 
   return (
-    <main className="min-h-screen  bg-[#F8FAFC] dark:bg-[#020617] transition-colors duration-500 overflow-x-hidden selection:bg-blue-500/20 selection:text-blue-600 dark:selection:text-blue-400">
+    <main className="min-h-screen bg-[#F8FAFC] dark:bg-[#020617] transition-colors duration-500 overflow-x-hidden selection:bg-blue-500/20 selection:text-blue-600 dark:selection:text-blue-400">
 
       {/* NAVBAR AREA */}
       <nav
-        className={`fixed z-50 left-1/2 -translate-x-1/2 transition-all duration-500 ease-in-out ${isScrolled
-          ? "top-4 w-[90%] max-w-6xl bg-white/70 dark:bg-[#020617]/70 backdrop-blur-xl border border-slate-200/50 dark:border-slate-800/50 rounded-3xl py-3 shadow-2xl shadow-blue-500/5"
-          : "top-0 w-full bg-transparent border-b border-transparent py-8 px-2 md:px-8"
-          }`}
+        className={`fixed z-50 left-1/2 -translate-x-1/2 transition-all duration-500 ease-in-out ${
+          isScrolled
+            ? "top-4 w-[90%] max-w-6xl bg-white/70 dark:bg-[#020617]/70 backdrop-blur-xl border border-slate-200/50 dark:border-slate-800/50 rounded-3xl py-3 shadow-2xl shadow-blue-500/5"
+            : "top-0 w-full bg-transparent border-b border-transparent py-8 px-2 md:px-8"
+        }`}
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -115,7 +122,7 @@ export default function Home() {
       </nav>
 
       {/* HERO SECTION */}
-      <section className="relative pt-44 pb-24 px-12">
+      <section id="hero" className="relative pt-44 pb-24 px-12">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-blue-500/10 dark:bg-blue-600/5 rounded-full blur-[120px] -z-10" />
 
         <div className="max-w-5xl mx-auto text-center relative">
@@ -226,7 +233,7 @@ export default function Home() {
       </section>
 
       {/* NEW SECTION: AI INTEGRATION FEATURES */}
-      <section className="py-24 bg-gradient-to-br from-blue-500/5 via-transparent to-indigo-500/5 border-y border-slate-200/30 dark:border-slate-900/30">
+      <section id="ai-tools" className="py-24 bg-gradient-to-br from-blue-500/5 via-transparent to-indigo-500/5 border-y border-slate-200/30 dark:border-slate-900/30">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">Supercharge Your Job Search</h2>
@@ -266,7 +273,7 @@ export default function Home() {
       </section>
 
       {/* FEATURES - Sticky Left & Scroll Right */}
-      <section className="py-24 max-w-7xl mx-auto px-12">
+      <section id="features" className="py-24 max-w-7xl mx-auto px-12">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
 
           {/* LEFT */}
@@ -306,14 +313,22 @@ export default function Home() {
                   {index + 1}
                 </div>
 
-                {/* CARD */}
-                <div className="p-6 bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/60 rounded-3xl hover:shadow-2xl hover:shadow-slate-900/5 dark:hover:shadow-none hover:border-blue-500/40 transition-all">
-
-                  <div className={`w-10 h-10 flex items-center justify-center rounded-xl mb-4 border ${item.color}`}>
-                    <item.icon size={18} />
+                {/* CARD DENGAN IKON MIRING */}
+                <div className="relative p-6 bg-white/60 dark:bg-slate-900/50 backdrop-blur-md border border-slate-200/60 dark:border-slate-800/80 rounded-[2rem] overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-blue-500/5 dark:hover:shadow-blue-500/10 hover:border-blue-500/30 dark:hover:border-blue-500/30">
+                  
+                  {/* Ikon Miring Ukuran Besar di Pojok Kanan Terpotong */}
+                  <div className={`absolute -right-8 -top-8 w-32 h-32 opacity-[0.06] dark:opacity-[0.03] ${item.iconColor} rotate-12 select-none pointer-events-none`}>
+                    <item.icon size={128} />
                   </div>
 
-                  <h3 className="font-bold text-slate-900 dark:text-white text-base mb-2">
+                  {/* Efek Glow di latar belakang */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  
+                  <div className={`w-12 h-12 flex items-center justify-center rounded-2xl mb-5 border shadow-sm transition-transform group-hover:scale-105 ${item.color}`}>
+                    <item.icon size={20} />
+                  </div>
+
+                  <h3 className="font-black text-slate-900 dark:text-white text-base mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors tracking-tight">
                     {item.title}
                   </h3>
 
@@ -330,7 +345,7 @@ export default function Home() {
       </section>
 
       {/* CTA - Modern Glow Section */}
-      <section className="py-24 px-6">
+      <section id="cta" className="py-24 px-6">
         <div className="relative max-w-4xl mx-auto text-center p-12 bg-gradient-to-tr from-blue-600/10 via-indigo-500/5 to-transparent border border-blue-500/20 rounded-[40px] shadow-2xl shadow-blue-500/5 backdrop-blur-xl">
           <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-48 h-48 bg-blue-500/20 rounded-full blur-3xl -z-10" />
 

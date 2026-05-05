@@ -23,7 +23,7 @@ const nunito = Nunito({
 });
 
 export const metadata: Metadata = {
-  title: "JobTrackr - Your Job Application Tracker",
+  title: "JobTrackr",
   description: "Track your job applications, interviews, and offers all in one place with JobTrackr.",
 };
 
