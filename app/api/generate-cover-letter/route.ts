@@ -2,12 +2,11 @@ import { GoogleGenAI } from "@google/genai";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth"; // Sesuaikan dengan path file auth Anda
 
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
-});
-
 export async function POST(req: Request) {
   try {
+    const ai = new GoogleGenAI({
+      apiKey: process.env.GEMINI_API_KEY,
+    });
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -22,8 +21,8 @@ export async function POST(req: Request) {
       );
     }
 
-    // Ambil nama dari session user yang login (fallback ke "Risky Prasetyo" sesuai profil Anda)
-    const applicantName = session.user?.name || "Risky Prasetyo";
+    // Ambil nama dari session user yang login 
+    const applicantName = session.user?.name || "Nama Pelamar";
 
     const prompt = `
       Anda adalah asisten pelamar kerja profesional. Buatlah surat lamaran pekerjaan formal berbahasa Indonesia.

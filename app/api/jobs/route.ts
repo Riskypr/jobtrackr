@@ -68,7 +68,7 @@ export async function POST(req: Request) {
         requirements: body.requirements || null,
         status: "APPLIED",
         appliedAt: appliedDate,
-        userId: session.user.id, // Hubungkan dengan user yang login
+        userId: session.user.id, 
         
         steps: [
           {

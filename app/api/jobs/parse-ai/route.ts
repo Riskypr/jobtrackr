@@ -2,12 +2,11 @@ import { GoogleGenAI } from "@google/genai";
 import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
 
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
-});
-
 export async function POST(req: Request) {
   try {
+    const ai = new GoogleGenAI({
+      apiKey: process.env.GEMINI_API_KEY,
+    });
     const session = await auth();
 
     if (!session?.user?.id) {
