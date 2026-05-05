@@ -16,14 +16,12 @@ export default function ApplicationsPage() {
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [searchQuery, setSearchQuery] = useState(""); 
   
-  // State untuk dropdown mobile
+  // State dropdown mobile
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Daftar status (sesuaikan dengan enum di backend kamu)
-  const statuses = ["ALL", "APPLIED", "INTERVIEW", "OFFER", "REJECTED"];
+  const statuses = ["ALL", "APPLIED", "INTERVIEW", "OFFER", "REJECTED", "ACCEPTED", "NO_RESPONSE"];
 
-  // Close dropdown saat klik di luar
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -104,7 +102,6 @@ export default function ApplicationsPage() {
                 <span className="text-[10px] font-bold uppercase tracking-widest">Status:</span>
               </div>
 
-              {/* 📱 MOBILE DROPDOWN (Tampil di < lg) */}
               <div className="lg:hidden relative w-full" ref={dropdownRef}>
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -150,7 +147,6 @@ export default function ApplicationsPage() {
                 </AnimatePresence>
               </div>
 
-              {/* 💻 DESKTOP FILTER (Tampil di >= lg) */}
               <div className="hidden lg:block w-auto">
                 <StatusFilter
                   statusFilter={statusFilter}
