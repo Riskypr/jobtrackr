@@ -12,25 +12,23 @@ export default function Dashboard() {
   const { jobs } = useJobs();
 
   const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 6 }, (_, i) => currentYear - i);
-  const [yearFilter, setYearFilter] = useState(currentYear);
+  const years = Array.from({ length: 5 }, (_, i) => currentYear - i);
+  const [yearFilter, setYearFilter] = useState<number | "all">("all");
 
   const filteredJobs = (jobs || []).filter((job: any) => {
+    if (yearFilter === "all") return true;
+
     const jobYear = new Date(job.appliedAt).getFullYear();
     return jobYear === yearFilter;
   });
 
   return (
     <div className="flex min-h-screen bg-[#F8FAFC] dark:bg-[#020617]">
-
-      {/* MAIN CONTENT */}
       <main className="flex-1 transition-all duration-300">
         <div className="max-w-[1400px] mx-auto p-4 md:p-8 lg:p-10 space-y-10">
-
-          {/* TOP SECTION: Header & Welcome */}
           <div className="space-y-6">
-            {/* <Header /> */}
 
+            {/* <Header /> */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-medium text-sm mb-1">
@@ -41,19 +39,33 @@ export default function Dashboard() {
                   Dashboard
                 </h1>
                 <p className="text-slate-500 dark:text-slate-400 mt-1 text-sm md:text-base">
-                  You have applied to <span className="font-semibold text-slate-900 dark:text-slate-200">{filteredJobs.length}</span> jobs in {yearFilter}.
+                  You have applied to{" "}
+                  <span className="font-semibold text-slate-900 dark:text-slate-200">
+                    {filteredJobs.length}
+                  </span>{" "}
+                  jobs {yearFilter === "all" ? "in all years" : `in ${yearFilter}`}.
                 </p>
               </div>
 
-              {/* MODERN YEAR FILTER */}
+              {/* FILTER */}
               <div className="inline-flex p-1 bg-slate-200/50 dark:bg-slate-800/50 backdrop-blur-md rounded-2xl border border-slate-200 dark:border-slate-700">
+                <button
+                  onClick={() => setYearFilter("all")}
+                  className={`relative px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${yearFilter === "all"
+                      ? "bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm ring-1 ring-slate-200 dark:ring-slate-600"
+                      : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+                    }`}
+                >
+                  All
+                </button>
+
                 {years.map((year) => (
                   <button
                     key={year}
                     onClick={() => setYearFilter(year)}
                     className={`relative px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${yearFilter === year
-                        ? "bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm ring-1 ring-slate-200 dark:ring-slate-600"
-                        : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+                      ? "bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm ring-1 ring-slate-200 dark:ring-slate-600"
+                      : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
                       }`}
                   >
                     {year}
@@ -63,7 +75,7 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* SECTION 1: KEY METRICS */}
+          {/* SECTION 1: ANALYTICS SUMMARY */}
           <section className="relative">
             <div className="flex items-center gap-2 mb-4 text-slate-400 text-xs uppercase tracking-widest font-bold">
               <Icon name="layout-grid" size={14} />
@@ -80,7 +92,7 @@ export default function Dashboard() {
               <div className="h-full bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-2 hover:border-blue-500/30 transition-colors shadow-sm">
                 <div className="flex items-center gap-2 p-4 text-slate-400 text-md poppercase font-bold">
                   <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center">
-                  <Icon name="calendar" size={18} strokeWidth={2.5} className="text-blue-500 text-bold" />
+                    <Icon name="calendar" size={18} strokeWidth={2.5} className="text-blue-500 text-bold" />
                   </div>
                   <h3 className="text-md font-bold poppercase text-slate-700 dark:text-slate-300 px-2">Activity Overview</h3>
                 </div>
@@ -97,7 +109,6 @@ export default function Dashboard() {
 
           </section>
         </div>
-   
       </main>
     </div>
   );
