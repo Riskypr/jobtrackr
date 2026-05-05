@@ -10,10 +10,12 @@ import JobList from "@/components/applications/JobList";
 import AddJobModal from "@/components/applications/AddJobModal";
 
 export default function ApplicationsPage() {
-  const { jobs, fetchJobs } = useJobs();
+  // const { jobs, fetchJobs } = useJobs();
+  const { jobs, fetchJobs, loading, error } = useJobs();
   const [open, setOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState("ALL");
-  const [searchQuery, setSearchQuery] = useState(""); // State untuk search
+  // State untuk search
+  const [searchQuery, setSearchQuery] = useState(""); 
 
   // Filter jobs berdasarkan status dan input pencarian
   const filteredJobs = jobs.filter((job: any) => {
@@ -27,9 +29,46 @@ export default function ApplicationsPage() {
     return matchesStatus && matchesSearch;
   });
 
+  if (loading) {
+  return (
+      <div className="flex items-center justify-center min-h-screen bg-[#F8FAFC] dark:bg-[#020617] overflow-hidden">
+        {/* BACKGROUND GLOW */}
+        <div className="absolute w-[500px] h-[500px] bg-blue-500/20 blur-[120px] rounded-full -z-10 animate-pulse" />
+        <div className="flex flex-col items-center gap-4">
+
+          {/* DOTS ANIMATION */}
+          <div className="flex gap-1 mt-2">
+            <span className="w-3 h-3 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.3s]" />
+            <span className="w-3 h-3 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.15s]" />
+            <span className="w-3 h-3 bg-blue-500 rounded-full animate-bounce" />
+          </div>
+
+          {/* TEXT */}
+          <div className="flex flex-col items-center gap-1">
+            <p className="text-md font-bold text-slate-700 dark:text-slate-300 tracking-wide">
+              Loading your data
+            </p>
+            <p className="text-[12px] text-slate-400 dark:text-slate-500 animate-pulse">
+              Please wait a moment...
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+}
+
+if (error) {
+  return (
+    <div className="flex items-center justify-center min-h-screen text-red-500">
+      Failed to load jobs: {error}
+    </div>
+  );
+}
+
+
   return (
     <div className="flex min-h-screen bg-[#F8FAFC] dark:bg-[#020617] transition-colors duration-300">
-      <Sidebar />
+      
 
       {/* MAIN CONTENT */}
       <main className="flex-1">
@@ -100,7 +139,7 @@ export default function ApplicationsPage() {
       <div className="md:hidden fixed bottom-[100px] right-6 z-40">
         <button
           onClick={() => setOpen(true)}
-          className="w-14 h-14 bg-blue-600 text-white rounded-full shadow-2xl shadow-blue-500/40 flex items-center justify-center hover:bg-blue-700 transition-all active:scale-90"
+          className="w-14 h-14 bg-blue-600 text-white rounded-xl shadow-2xl shadow-blue-500/40 flex items-center justify-center hover:bg-blue-700 transition-all active:scale-90"
         >
           <Icon name="plus" size={28} strokeWidth={3} />
         </button>
