@@ -34,8 +34,6 @@ export default function Navigation() {
 
   // Shortcut data user
   const user = session?.user;
-  const userInitials = user?.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase() : "U";
-  const avatarUrl = user?.image || `https://ui-avatars.com/api/?name=${user?.name || "User"}&background=2563eb&color=fff`;
 
   const menu = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -168,22 +166,34 @@ export default function Navigation() {
             <ChevronUp size={16} className={`mr-2 text-slate-300 transition-transform duration-500 ${isProfileOpen ? "rotate-180" : ""}`} />
           </motion.button>
         </div>
-
       </aside>
 
       {/* MOBILE BOTTOM NAV */}
-      <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-[50] w-[90%] max-w-[400px]">
-        <div className="flex items-center p-1.5 bg-white/90 dark:bg-slate-900/90 backdrop-blur-2xl border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl relative shadow-blue-500/10">
+      <div className="md:hidden fixed bottom-5 left-4 right-4 z-[50]">
+        {/* Backdrop untuk modal mobile */}
+        <AnimatePresence>
+          {isProfileOpen && (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsProfileOpen(false)}
+              className="fixed inset-0 bg-slate-950/20 backdrop-blur-sm z-40"
+            />
+          )}
+        </AnimatePresence>
+
+        <div className="flex items-center p-2 bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl border border-slate-200/30 dark:border-slate-800/30 rounded-3xl shadow-2xl relative z-50">
           {menu.map((item) => {
             const Icon = item.icon;
             const active = pathname === item.href;
             return (
-              <Link key={item.href} href={item.href} className="flex-1 relative py-4 rounded-md flex justify-center">
-                <Icon size={20} className={`relative z-10 transition-colors ${active ? "text-white dark:text-slate-900" : "text-slate-400"}`} strokeWidth={2.5} />
+              <Link key={item.href} href={item.href} className="flex-1 relative py-3.5 rounded-2xl flex justify-center items-center">
+                <Icon size={22} className={`relative z-10 transition-colors duration-300 ${active ? "text-blue-600 dark:text-blue-400" : "text-slate-400 dark:text-slate-500"}`} strokeWidth={active ? 2.5 : 2} />
                 {active && (
                   <motion.div 
                     layoutId="mobileNavActive"
-                    className="absolute inset-1.5 bg-blue-800 dark:bg-white rounded-xl -z-0"
+                    className="absolute inset-1.5 bg-blue-50 dark:bg-blue-950/50 rounded-2xl border border-blue-500/20 -z-0"
                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                   />
                 )}
@@ -192,49 +202,88 @@ export default function Navigation() {
           })}
           
           {/* Avatar Trigger Mobile */}
-          <button onClick={() => setIsProfileOpen(!isProfileOpen)} className="flex-1 flex justify-center py-2 relative">
-             <motion.img 
-              animate={isProfileOpen ? { scale: 1.1, border: "2px solid #2563eb" } : { scale: 1, border: "2px solid transparent" }}
-              src={session?.user?.image || "/default-avatar.png"}
-              alt="P" 
-              className="w-9 h-9 rounded-full shadow-sm object-cover" 
-             />
+          <button 
+            onClick={() => setIsProfileOpen(!isProfileOpen)} 
+            className="flex-1 flex justify-center py-2 relative items-center"
+          >
+             <motion.div 
+               animate={isProfileOpen ? { scale: 1.08 } : { scale: 1 }}
+               className={`w-9 h-9 rounded-full overflow-hidden flex items-center justify-center ${isProfileOpen ? "ring-2 ring-blue-500 dark:ring-blue-400 ring-offset-2 ring-offset-white dark:ring-offset-slate-900" : ""}`}
+             >
+               <img 
+                 src={session?.user?.image || "/default-avatar.png"}
+                 alt="P" 
+                 className="w-full h-full object-cover" 
+                 referrerPolicy="no-referrer"
+               />
+             </motion.div>
           </button>
 
+          {/* Popup Menu */}
           <AnimatePresence>
             {isProfileOpen && (
               <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
-                className="absolute bottom-[100%] left-0 right-0 mb-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl overflow-hidden p-4 z-50"
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 20, scale: 0.95 }}
+                transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
+                className="absolute bottom-[calc(100%+16px)] left-0 right-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border border-slate-200/50 dark:border-slate-800/50 p-5 rounded-[2.5rem] overflow-hidden shadow-2xl"
               >
-                  <div className="text-center py-2">
-                    <p className="text-sm font-black dark:text-white leading-tight">{user?.name}</p>
-                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest truncate px-4">{user?.email}</p>
+                <div className="flex items-center gap-3.5 p-3.5 bg-slate-50/50 dark:bg-slate-950/50 rounded-2xl border border-slate-100 dark:border-slate-800/30 mb-4">
+                  <img 
+                    src={session?.user?.image || "/default-avatar.png"}
+                    alt="P" 
+                    className="w-9 h-9 rounded-full object-cover border border-slate-200 dark:border-slate-800 shadow-sm" 
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="overflow-hidden">
+                    <p className="text-xs font-black dark:text-white truncate leading-tight">{user?.name || "User"}</p>
+                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider truncate mt-0.5">{user?.email || "lorem@gmail.com"}</p>
                   </div>
-                  <div className="h-px bg-slate-100 dark:bg-slate-800 my-4" />
+                </div>
+
+                <div className="space-y-1">
+                  <Link href="/profile" className="flex items-center gap-3 px-4 py-3 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/50 rounded-2xl transition-all">
+                    <div className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400">
+                      <User size={14} strokeWidth={2.2} />
+                    </div>
+                    Profile
+                  </Link>
+                  <Link href="/settings" className="flex items-center gap-3 px-4 py-3 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/50 rounded-2xl transition-all">
+                    <div className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400">
+                      <Settings size={14} strokeWidth={2.2} />
+                    </div>
+                    Settings
+                  </Link>
                   
-                  {/* Mobile Theme Toggle */}
-                  <div className="flex items-center p-1 bg-slate-100 dark:bg-slate-950 rounded-2xl relative h-12 border border-slate-200/50 dark:border-slate-800">
+                  {/* Theme Toggle */}
+                  <div className="flex items-center p-1 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl relative mt-2 h-11">
                     <motion.div 
-                      className="absolute h-10 w-[47%] bg-white dark:bg-blue-600 rounded-xl shadow-sm"
+                      className="absolute h-9 w-[47%] bg-white dark:bg-blue-600 rounded-xl shadow-sm"
                       animate={{ x: currentTheme === "light" ? 0 : "106%" }}
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     />
-                    <button onClick={() => setTheme("light")} className={`relative z-10 flex-1 flex items-center justify-center gap-2 font-black text-[10px] uppercase ${currentTheme === "light" ? "text-blue-600" : "text-slate-400"}`}>
-                      <Sun size={14} strokeWidth={2.5} /> Light
+                    <button onClick={() => setTheme("light")} className={`relative z-10 flex-1 flex justify-center items-center p-2 transition-colors ${currentTheme === "light" ? "text-blue-600 dark:text-white" : "text-slate-400"}`}>
+                      <Sun size={14} strokeWidth={2.5} />
                     </button>
-                    <button onClick={() => setTheme("dark")} className={`relative z-10 flex-1 flex items-center justify-center gap-2 font-black text-[10px] uppercase ${currentTheme === "dark" ? "text-white" : "text-slate-400"}`}>
-                      <Moon size={14} strokeWidth={2.5} /> Dark
+                    <button onClick={() => setTheme("dark")} className={`relative z-10 flex-1 flex justify-center items-center p-2 transition-colors ${currentTheme === "dark" ? "text-blue-600 dark:text-white" : "text-slate-400"}`}>
+                      <Moon size={14} strokeWidth={2.5} />
                     </button>
                   </div>
+
+                  <div className="h-px bg-slate-100 dark:bg-slate-800 my-2" />
                   
+                  {/* Logout Button */}
                   <button 
                     onClick={() => signOut({ callbackUrl: "/" })}
-                    className="w-full mt-3 flex items-center justify-center gap-2 py-4 text-[10px] font-black text-red-500 uppercase tracking-widest hover:bg-red-50 dark:hover:bg-red-500/10 rounded-2xl transition-all"
+                    className="w-full flex items-center gap-3 px-4 py-3 text-xs font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-2xl transition-all"
                   >
-                    <LogOut size={16} /> Sign Out Account
+                    <div className="w-8 h-8 rounded-xl bg-red-50 dark:bg-red-950/30 flex items-center justify-center text-red-500">
+                      <LogOut size={14} strokeWidth={2.2} />
+                    </div>
+                    Sign Out
                   </button>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
