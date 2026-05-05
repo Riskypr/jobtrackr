@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.2",
+    "@floating-ui/react": "^0.27.19",
     "@google/genai": "^1.51.0",
     "@prisma/client": "^5.22.0",
     "date-fns": "^4.1.0",

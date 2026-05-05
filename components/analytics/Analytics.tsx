@@ -43,7 +43,7 @@ export default function Analytics({ jobs }: any) {
   return (
     <div className="grid lg:grid-cols-3 gap-6">
 
-      {/* 🔥 LEFT: GRID STATS */}
+      {/*  LEFT: GRID STATS */}
       <div className="lg:col-span-2 grid grid-cols-2 gap-4 md:gap-6">
         
         {/* TOTAL APPLICATIONS */}

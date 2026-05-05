@@ -96,7 +96,7 @@ export default function Dashboard() {
                   </div>
                   <h3 className="text-md font-bold poppercase text-slate-700 dark:text-slate-300 px-2">Activity Overview</h3>
                 </div>
-                <YearDistribution jobs={filteredJobs} />
+                <YearDistribution jobs={filteredJobs} year={yearFilter}/>
               </div>
             </div>
 
