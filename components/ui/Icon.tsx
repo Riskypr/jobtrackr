@@ -15,6 +15,7 @@ import {
   ChevronRight,
   ChevronUp,
   Clock,
+  ChevronDown, 
   Database,
   Filter, 
   LayoutDashboard,
@@ -52,7 +53,8 @@ export type IconName =
   | "clock"
   | "check-circle"
   | "circle"
-  | "check" 
+  | "check"
+  | "chevron-down" 
   | "database"
   | "plus" 
   | "search" 
@@ -95,6 +97,7 @@ const icons = {
   circle: Circle,
   check: Check,
   clock: Clock,
+  "chevron-down": ChevronDown,
   database: Database,
   plus: Plus,
   search: Search,
