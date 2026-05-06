@@ -5,7 +5,8 @@ export default auth((req) => {
   const { pathname } = req.nextUrl;
 
   const isAuthPage = pathname.startsWith("/auth");
-  const isPublicPage = pathname === "/";
+  const publicPaths = ["/", "/learn-more", "/watch-demo", "/privacy", "/terms"];
+  const isPublicPage = publicPaths.includes(pathname);
 
   if (!isLoggedIn && !isAuthPage && !isPublicPage) {
     return Response.redirect(new URL("/auth/login", req.nextUrl));

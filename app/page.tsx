@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import ThemeToggle from "@/components/ThemeToggle";
 import FooterSide from "@/components/footer/FooterSide";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Zap,
   ChevronRight,
@@ -16,11 +16,13 @@ import {
   Shield,
   FileText,
   LineChart,
-  ArrowRight
+  ArrowRight,
+  X
 } from "lucide-react";
 
 export default function Home() {
   const router = useRouter();
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -91,11 +93,10 @@ export default function Home() {
 
       {/* NAVBAR AREA */}
       <nav
-        className={`fixed z-50 left-1/2 -translate-x-1/2 transition-all duration-500 ease-in-out ${
-          isScrolled
+        className={`fixed z-50 left-1/2 -translate-x-1/2 transition-all duration-500 ease-in-out ${isScrolled
             ? "top-4 w-[90%] max-w-6xl bg-white/70 dark:bg-[#020617]/70 backdrop-blur-xl border border-slate-200/50 dark:border-slate-800/50 rounded-3xl py-3 shadow-2xl shadow-blue-500/5"
             : "top-0 w-full bg-transparent border-b border-transparent py-8 px-2 md:px-8"
-        }`}
+          }`}
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -187,7 +188,9 @@ export default function Home() {
                 Launch Dashboard <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </button>
             </Link>
-            <button className="px-8 py-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-bold text-lg hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-all">
+            <button
+              onClick={() => setIsVideoOpen(true)}
+              className="px-8 py-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-bold text-lg hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-all">
               Watch Demo
             </button>
           </motion.div>
@@ -315,7 +318,7 @@ export default function Home() {
 
                 {/* CARD DENGAN IKON MIRING */}
                 <div className="relative p-6 bg-white/60 dark:bg-slate-900/50 backdrop-blur-md border border-slate-200/60 dark:border-slate-800/80 rounded-[2rem] overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-blue-500/5 dark:hover:shadow-blue-500/10 hover:border-blue-500/30 dark:hover:border-blue-500/30">
-                  
+
                   {/* Ikon Miring Ukuran Besar di Pojok Kanan Terpotong */}
                   <div className={`absolute -right-8 -top-8 w-32 h-32 opacity-[0.06] dark:opacity-[0.03] ${item.iconColor} rotate-12 select-none pointer-events-none`}>
                     <item.icon size={128} />
@@ -323,7 +326,7 @@ export default function Home() {
 
                   {/* Efek Glow di latar belakang */}
                   <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  
+
                   <div className={`w-12 h-12 flex items-center justify-center rounded-2xl mb-5 border shadow-sm transition-transform group-hover:scale-105 ${item.color}`}>
                     <item.icon size={20} />
                   </div>
@@ -358,19 +361,49 @@ export default function Home() {
             Simple, fast, and free to get started. No setup needed.
           </p>
 
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
+          <div className="flex flex-col sm:flex-row justify-center">
             <Link href="/dashboard">
               <button className="group px-7 py-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold transition-all hover:scale-[1.03] active:scale-95 shadow-2xl shadow-blue-500/30 flex items-center gap-3 mx-auto">
                 Get Started <ArrowRight size={16} className="group-hover:translate-x-0.5 transition" />
               </button>
             </Link>
-
-            <button className="px-7 py-4 rounded-2xl border border-slate-200 dark:border-slate-800 text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition mx-auto">
-              Learn More
-            </button>
           </div>
         </div>
       </section>
+      
+      {/* Modal Watch Demo */}
+       <AnimatePresence>
+        {isVideoOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-10 bg-slate-950/90 backdrop-blur-md"
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="relative w-full max-w-5xl aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl border border-white/10"
+            >
+              <button
+                onClick={() => setIsVideoOpen(false)}
+                className="absolute top-6 right-6 z-10 w-12 h-12 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white transition-all"
+              >
+                <X size={24} />
+              </button>
+
+              <iframe
+                className="w-full h-full"
+                src="https://www.youtube.com/embed/cVaG6adE2mA?autoplay=1"
+                title="JobTrackr Walkthrough"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <FooterSide />
     </main>
