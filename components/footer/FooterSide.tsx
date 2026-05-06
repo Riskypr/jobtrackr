@@ -94,10 +94,10 @@ export default function FooterSide() {
             <p>© {currentYear} JobTrackr</p>
 
             <div className="flex items-center gap-4">
-              <Link href="#" className="hover:text-slate-800 dark:hover:text-white transition">
+              <Link href="/privacy" className="hover:text-slate-800 dark:hover:text-white transition">
                 Privacy
               </Link>
-              <Link href="#" className="hover:text-slate-800 dark:hover:text-white transition">
+              <Link href="/terms" className="hover:text-slate-800 dark:hover:text-white transition">
                 Terms
               </Link>
             </div>
